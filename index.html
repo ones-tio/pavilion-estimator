@@ -3,115 +3,98 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pavilion Kanopi Bogor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pavilion Estimator</title>
 <style>
 body{
-font-family:Arial, sans-serif;
-padding:20px;
-max-width:520px;
+font-family:Arial;
+max-width:500px;
 margin:auto;
-background:#f5f7fa;
+padding:20px;
+background:#f2f4f7;
 }
-h1{
-font-size:28px;
-text-align:center;
-color:#0f2d52;
-}
-.card{
+.box{
 background:white;
 padding:20px;
-border-radius:14px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
+border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+h1{
+text-align:center;
+font-size:26px;
+color:#12395b;
 }
 input,select,button{
 width:100%;
 padding:12px;
 margin-top:10px;
+font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
-font-size:16px;
+box-sizing:border-box;
 }
 button{
-background:#0f2d52;
+background:#12395b;
 color:white;
 font-weight:bold;
-cursor:pointer;
+border:none;
 }
-button:hover{
-opacity:0.9;
-}
-.result{
-margin-top:18px;
+#hasil{
+margin-top:20px;
 line-height:1.8;
 font-size:16px;
-}
-.small{
-font-size:13px;
-color:#777;
-margin-top:10px;
 }
 </style>
 </head>
 <body>
 
+<div class="box">
 <h1>Pavilion Kanopi Bogor</h1>
 
-<div class="card">
-
-<select id="roof">
+<select id="jenis">
 <option value="0.83">Twinwall</option>
 <option value="0.76">RS</option>
 </select>
 
-<input type="number" id="width" placeholder="Lebar Area (meter)">
-<input type="number" id="span" placeholder="Bentang Air / Panjang (meter)">
-<input type="number" id="front" placeholder="Panjang Depan untuk Eser (meter)">
+<input id="lebar" type="number" placeholder="Lebar Area (meter)">
+<input id="panjang" type="number" placeholder="Bentang Air (meter)">
+<input id="eser" type="number" placeholder="Panjang Depan Eser (meter)">
 
-<button onclick="calc()">HITUNG MATERIAL</button>
+<button onclick="hitung()">HITUNG</button>
 
-<div class="result" id="result"></div>
-
-<div class="small">
-Hollow 4x6 = batang 6m<br>
-Hollow 5x10 = batang 6m
-</div>
-
+<div id="hasil"></div>
 </div>
 
 <script>
-function calc(){
+function hitung(){
+let eff = parseFloat(document.getElementById('jenis').value);
+let lebar = parseFloat(document.getElementById('lebar').value);
+let panjang = parseFloat(document.getElementById('panjang').value);
+let eser = parseFloat(document.getElementById('eser').value);
 
-let eff = parseFloat(document.getElementById('roof').value);
-let width = parseFloat(document.getElementById('width').value);
-let span = parseFloat(document.getElementById('span').value);
-let front = parseFloat(document.getElementById('front').value);
-
-if(!width || !span || !front){
-document.getElementById('result').innerHTML="Isi semua data dulu.";
+if(!lebar || !panjang || !eser){
+document.getElementById('hasil').innerHTML="Lengkapi semua data.";
 return;
 }
 
-let sheets = Math.ceil(width / eff);
-let area = (width * span).toFixed(2);
+let lembar = Math.ceil(lebar/eff);
+let luas = (lebar*panjang).toFixed(2);
 
-let h510m = (2*(width+span)+width);
-let h510b = Math.ceil(h510m/6);
+let h510 = (2*(lebar+panjang)+lebar);
+let b510 = Math.ceil(h510/6);
 
-let h46m = ((width*3)+(span*4));
-let h46b = Math.ceil(h46m/6);
+let h46 = (lebar*3)+(panjang*4);
+let b46 = Math.ceil(h46/6);
 
-let eser = (front*0.22).toFixed(2);
+let pleser = (eser*0.22).toFixed(2);
 
-let panjangSaran = Math.ceil(span);
-
-document.getElementById('result').innerHTML =
-"<b>Luas Atap:</b> "+area+" m²<br>"+
-"<b>Jumlah Lembar:</b> "+sheets+" lembar<br>"+
-"<b>Panjang Disarankan:</b> "+panjangSaran+" meter<br><hr>"+
-"<b>Hollow 5x10:</b> "+h510m.toFixed(1)+" m / "+h510b+" batang<br>"+
-"<b>Hollow 4x6:</b> "+h46m.toFixed(1)+" m / "+h46b+" batang<br>"+
-"<b>Plat Eser:</b> "+eser+" m²";
+document.getElementById('hasil').innerHTML =
+"<hr>" +
+"Luas Atap: <b>"+luas+" m²</b><br>" +
+"Jumlah Lembar: <b>"+lembar+"</b><br>" +
+"Hollow 5x10: <b>"+b510+" batang</b><br>" +
+"Hollow 4x6: <b>"+b46+" batang</b><br>" +
+"Plat Eser: <b>"+pleser+" m²</b>";
 }
 </script>
 
