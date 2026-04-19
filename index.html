@@ -1,126 +1,114 @@
-```html
+```html id="4v2m6p"
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pavilion Estimator PRO MAX</title>
+<title>Pavilion Estimator L Shape</title>
 <style>
 body{font-family:Arial;max-width:520px;margin:auto;padding:20px;background:#f2f4f7}
 .box{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1)}
-h1{text-align:center;color:#12395b;font-size:26px}
+h1{text-align:center;color:#12395b;font-size:24px}
 input,select,button{width:100%;padding:12px;margin-top:10px;font-size:16px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
 button{background:#12395b;color:#fff;font-weight:bold;border:none}
 #hasil{margin-top:20px;line-height:1.8;font-size:16px}
-small{color:#666}
+label{margin-top:10px;display:block;font-weight:bold}
 </style>
 </head>
 <body>
 <div class="box">
+
 <h1>Pavilion Kanopi Bogor</h1>
 
+<label>Bentuk Kanopi</label>
+<select id="bentuk" onchange="ubahForm()">
+<option value="kotak">Persegi</option>
+<option value="L">L Shape</option>
+</select>
+
+<label>Jenis Atap</label>
 <select id="jenis">
 <option value="0.83">Twinwall</option>
 <option value="0.76">RS</option>
 </select>
 
-<input id="lebar" type="number" step="0.1" placeholder="Lebar Area (meter)">
-<input id="panjang" type="number" step="0.1" placeholder="Bentang Air (meter)">
-<input id="talang" type="number" step="0.1" placeholder="Panjang Talang (opsional)">
+<div id="kotakForm">
+<input id="lebar" type="number" step="0.1" placeholder="Lebar Area (m)">
+<input id="panjang" type="number" step="0.1" placeholder="Bentang Air (m)">
+</div>
 
-<select id="cordoba">
-<option value="0">Cordoba (tidak ada)</option>
-<option value="1">Cordoba 1</option>
-<option value="2">Cordoba 2</option>
-<option value="3">Cordoba 3</option>
-</select>
+<div id="LForm" style="display:none">
+<input id="a1" type="number" step="0.1" placeholder="Panjang Area A (m)">
+<input id="a2" type="number" step="0.1" placeholder="Lebar Area A (m)">
+<input id="b1" type="number" step="0.1" placeholder="Panjang Area B (m)">
+<input id="b2" type="number" step="0.1" placeholder="Lebar Area B (m)">
+</div>
 
-<button onclick="hitung()">HITUNG MATERIAL</button>
+<button onclick="hitung()">HITUNG</button>
 
 <div id="hasil"></div>
-<small>Batang hollow = panjang 6 meter</small>
+
 </div>
 
 <script>
+function ubahForm(){
+let bentuk=document.getElementById("bentuk").value;
+document.getElementById("kotakForm").style.display = bentuk=="kotak" ? "block":"none";
+document.getElementById("LForm").style.display = bentuk=="L" ? "block":"none";
+}
+
 function pilihUkuran(p){
-if(p<=3) return 3;
-if(p<=4) return 4;
-if(p<=6) return 6;
-return p.toFixed(1)+" (Custom)";
+if(p<=3)return 3;
+if(p<=4)return 4;
+if(p<=6)return 6;
+return p.toFixed(1)+" Custom";
 }
 
 function hitung(){
+
 let eff=parseFloat(document.getElementById("jenis").value);
 let jenis=document.getElementById("jenis").selectedOptions[0].text;
+let bentuk=document.getElementById("bentuk").value;
+
+let luas=0;
+let lebarHitung=0;
+let bentang=0;
+
+if(bentuk=="kotak"){
 let lebar=parseFloat(document.getElementById("lebar").value);
 let panjang=parseFloat(document.getElementById("panjang").value);
-let talang=parseFloat(document.getElementById("talang").value)||0;
-let cordoba=parseInt(document.getElementById("cordoba").value);
 
-if(!lebar || !panjang){
-document.getElementById("hasil").innerHTML="Isi Lebar dan Bentang Air dulu.";
-return;
+if(!lebar || !panjang){hasil.innerHTML="Isi data dulu"; return;}
+
+luas=lebar*panjang;
+lebarHitung=lebar;
+bentang=panjang;
 }
 
-let lembar=Math.ceil(lebar/eff);
-let ukuran=pilihUkuran(panjang);
-let luas=(lebar*panjang).toFixed(2);
+if(bentuk=="L"){
+let a1=parseFloat(document.getElementById("a1").value);
+let a2=parseFloat(document.getElementById("a2").value);
+let b1=parseFloat(document.getElementById("b1").value);
+let b2=parseFloat(document.getElementById("b2").value);
 
-/* Hollow utama */
-let h510=(2*(lebar+panjang)+lebar);
+if(!a1||!a2||!b1||!b2){hasil.innerHTML="Isi data L Shape dulu"; return;}
 
-/* tambah talang */
-if(talang>0){ h510+=talang; }
-
-let b510=Math.ceil(h510/6);
-
-/* Hollow 4x6 */
-let h46=(lebar*3)+(panjang*4);
-let b46=Math.ceil(h46/6);
-
-/* Talang eser */
-let eser=0;
-let lembarEser=0;
-if(talang>0){
-eser=talang*0.30;
-lembarEser=Math.ceil(eser/2.88);
+luas=(a1*a2)+(b1*b2);
+lebarHitung=a1+b1;
+bentang=Math.max(a2,b2);
 }
 
-/* Cordoba */
-let c44=0,c24=0;
+let lembar=Math.ceil(lebarHitung/eff);
+let ukuran=pilihUkuran(bentang);
 
-if(cordoba==1){
-c44=lebar;
-c24=lebar;
-}
-if(cordoba==2){
-c44=lebar+panjang;
-c24=lebar+panjang;
-}
-if(cordoba==3){
-c44=(2*panjang)+lebar;
-c24=(2*panjang)+lebar;
-}
-
-let b44=Math.ceil(c44/6);
-let b24=Math.ceil(c24/6);
-
-document.getElementById("hasil").innerHTML=
+hasil.innerHTML=
 "<hr>"+
-"<b>ATAP:</b><br>"+
-jenis+" "+ukuran+" m x "+lembar+" lembar<br>"+
-"Luas: "+luas+" m²<br><br>"+
-
-"<b>HOLLOW:</b><br>"+
-"5x10 = "+h510.toFixed(1)+" m / "+b510+" batang<br>"+
-"4x6 = "+h46.toFixed(1)+" m / "+b46+" batang<br>"+
-
-(c44>0 ? "4x4 = "+c44.toFixed(1)+" m / "+b44+" batang<br>" : "")+
-(c24>0 ? "2x4 = "+c24.toFixed(1)+" m / "+b24+" batang<br>" : "")+
-
-(talang>0 ? "<br><b>TALANG:</b><br>Plat Eser = "+eser.toFixed(2)+" m² / "+lembarEser+" lembar<br>" : "");
+"<b>Bentuk:</b> "+(bentuk=="kotak"?"Persegi":"L Shape")+"<br>"+
+"<b>Atap:</b> "+jenis+" "+ukuran+" m x "+lembar+" lembar<br>"+
+"<b>Luas:</b> "+luas.toFixed(2)+" m²";
 }
 </script>
+
 </body>
 </html>
 ```
