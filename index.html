@@ -1,48 +1,50 @@
-```html
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pavilion Estimator</title>
-<style>
-body{font-family:Arial;padding:20px;max-width:500px;margin:auto}
-input,select,button{width:100%;padding:10px;margin:8px 0}
-.card{border:1px solid #ddd;padding:15px;border-radius:10px}
-h1{font-size:24px}
-</style>
-</head>
-<body>
-<h1>Pavilion Kanopi Bogor</h1>
-<div class="card">
-<select id="roof">
-<option value="0.83">Twinwall</option>
-<option value="0.76">RS</option>
-</select>
+import React, { useMemo, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-<input id="width" placeholder="Lebar area (meter)">
-<input id="span" placeholder="Bentang air (meter)">
-<button onclick="calc()">Hitung</button>
-
-<h3>Hasil:</h3>
-<p id="result"></p>
-</div>
-
-<script>
-function calc(){
-let eff=parseFloat(document.getElementById('roof').value);
-let width=parseFloat(document.getElementById('width').value);
-let span=parseFloat(document.getElementById('span').value);
-
-let lembar=Math.ceil(width/eff);
-let luas=(width*span).toFixed(2);
-
-document.getElementById('result').innerHTML=
-"Luas Atap: "+luas+" m²<br>"+
-"Jumlah Lembar: "+lembar+" lembar<br>"+
-"Panjang Disarankan: "+Math.ceil(span)+" meter";
+export default function App(){
+ const [roof,setRoof]=useState('Twinwall');
+ const [width,setWidth]=useState('6.24');
+ const [span,setSpan]=useState('4.60');
+ const [length,setLength]=useState('6.24');
+ const result = useMemo(()=>{
+   const eff = roof==='Twinwall'?0.83:0.76;
+   const sheets = Math.ceil(parseFloat(width||0)/eff);
+   const sheetLen = Math.ceil(parseFloat(span||0));
+   const area = (parseFloat(width||0)*parseFloat(span||0)).toFixed(2);
+   const h510m = (2*(parseFloat(width||0)+parseFloat(span||0))+parseFloat(width||0));
+   const h510 = Math.ceil(h510m/6);
+   const h46m = (parseFloat(width||0)*3 + parseFloat(span||0)*4);
+   const h46 = Math.ceil(h46m/6);
+   const eser = (parseFloat(length||0)*0.22).toFixed(2);
+   return {eff,sheets,sheetLen,area,h510m:h510m.toFixed(1),h510,h46m:h46m.toFixed(1),h46,eser};
+ },[roof,width,span,length]);
+ return <div className='p-6 max-w-4xl mx-auto grid gap-4'>
+   <h1 className='text-3xl font-bold'>Pavilion Kanopi Bogor Estimator</h1>
+   <Card className='rounded-2xl'><CardContent className='p-4 grid md:grid-cols-2 gap-4'>
+     <div className='grid gap-3'>
+       <label>Jenis Atap</label>
+       <Select value={roof} onValueChange={setRoof}><SelectTrigger><SelectValue/></SelectTrigger><SelectContent><SelectItem value='Twinwall'>Twinwall</SelectItem><SelectItem value='RS'>RS</SelectItem></SelectContent></Select>
+       <label>Lebar Area (m)</label><Input value={width} onChange={e=>setWidth(e.target.value)} />
+       <label>Bentang Air / Panjang Lembar (m)</label><Input value={span} onChange={e=>setSpan(e.target.value)} />
+       <label>Panjang Depan untuk Eser (m)</label><Input value={length} onChange={e=>setLength(e.target.value)} />
+       <Button onClick={()=>window.location.reload()}>Reset / Hitung Ulang</Button>
+     </div>
+     <div className='grid gap-2'>
+       <div className='text-xl font-semibold'>Hasil</div>
+       <div>Luas Atap: {result.area} m²</div>
+       <div>Jumlah Lembar {roof}: {result.sheets} lembar</div>
+       <div>Hollow 5x10: {result.h510m} m / {result.h510} batang</div>
+       <div>Hollow 4x6: {result.h46m} m / {result.h46} batang</div>
+       <div>Plat Eser: {result.eser} m²</div>
+       <div>Ukuran Disarankan: {result.sheetLen} m</div>
+       <div>Hollow 5x10: {result.h510m} m / {result.h510} batang</div>
+       <div>Hollow 4x6: {result.h46m} m / {result.h46} batang</div>
+       <div>Plat Eser: {result.eser} m²</div>
+       <div className='text-sm text-slate-500'>Efektif lebar lembar: {result.eff} m</div>
+     </div>
+   </CardContent></Card>
+ </div>
 }
-</script>
-</body>
-</html>
-```
