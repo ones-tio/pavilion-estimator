@@ -1,0 +1,48 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pavilion Estimator</title>
+<style>
+body{font-family:Arial;padding:20px;max-width:500px;margin:auto}
+input,select,button{width:100%;padding:10px;margin:8px 0}
+.card{border:1px solid #ddd;padding:15px;border-radius:10px}
+h1{font-size:24px}
+</style>
+</head>
+<body>
+<h1>Pavilion Kanopi Bogor</h1>
+<div class="card">
+<select id="roof">
+<option value="0.83">Twinwall</option>
+<option value="0.76">RS</option>
+</select>
+
+<input id="width" placeholder="Lebar area (meter)">
+<input id="span" placeholder="Bentang air (meter)">
+<button onclick="calc()">Hitung</button>
+
+<h3>Hasil:</h3>
+<p id="result"></p>
+</div>
+
+<script>
+function calc(){
+let eff=parseFloat(document.getElementById('roof').value);
+let width=parseFloat(document.getElementById('width').value);
+let span=parseFloat(document.getElementById('span').value);
+
+let lembar=Math.ceil(width/eff);
+let luas=(width*span).toFixed(2);
+
+document.getElementById('result').innerHTML=
+"Luas Atap: "+luas+" m²<br>"+
+"Jumlah Lembar: "+lembar+" lembar<br>"+
+"Panjang Disarankan: "+Math.ceil(span)+" meter";
+}
+</script>
+</body>
+</html>
+```
