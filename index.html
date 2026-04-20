@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pavilion Estimator MASTER</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
     --navy: #0f2d4a; --navy-mid: #1a4568; --accent: #3a9bd5;
@@ -13,7 +11,11 @@
     --text: #1a2b3c; --muted: #7a8fa6; --border: #d4dde8; --radius: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); min-height: 100vh; padding: 24px 16px 48px; color: var(--text); }
+  body {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg); min-height: 100vh;
+    padding: 24px 16px 48px; color: var(--text);
+  }
   .wrapper { max-width: 520px; margin: 0 auto; }
 
   .header { text-align: center; margin-bottom: 20px; }
@@ -56,34 +58,31 @@
   .btn-reset:hover { border-color: #e74c3c; color: #e74c3c; }
 
   .hasil-card { background: var(--navy); border-radius: 16px; padding: 20px; color: #fff; display: none; animation: slideUp 0.3s ease; margin-top: 14px; }
-  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
   .hasil-card.show { display: block; }
-
   .hasil-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 10px; }
   .hasil-meta {}
   .hasil-title-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
   .hasil-konsumen { font-size: 16px; font-weight: 800; color: #fff; }
   .hasil-tanggal { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
-
-  .btn-simpan { flex-shrink: 0; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; padding: 9px 13px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-  .btn-simpan:hover { background: rgba(255,255,255,0.2); }
-  .btn-simpan:active { transform: scale(0.96); }
-  .btn-simpan.loading { opacity: 0.5; pointer-events: none; }
+  .btn-simpan { flex-shrink:0; display:flex; align-items:center; gap:5px; background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.2); color:#fff; border-radius:10px; padding:9px 13px; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+  .btn-simpan:hover { background:rgba(255,255,255,0.2); }
+  .btn-simpan:active { transform:scale(0.96); }
+  .btn-simpan.loading { opacity:0.5; pointer-events:none; }
 
   .hasil-section { margin-bottom: 16px; }
   .hasil-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
-  .hasil-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: rgba(255,255,255,0.07); border-radius: 8px; margin-bottom: 5px; }
-  .hasil-item-name { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); }
-  .hasil-item-val { text-align: right; }
-  .hasil-item-val .meter { font-size: 12px; color: rgba(255,255,255,0.5); }
-  .hasil-item-val .batang { font-size: 16px; font-weight: 800; color: #fff; }
-  .hasil-item-val .batang span { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6); }
-  .luas-chip { display: inline-block; background: rgba(58,155,213,0.2); color: var(--accent); font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 8px; margin-bottom: 14px; }
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 14px 0; }
-
-  .note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
-  .error-msg { background: #fff0f0; border: 1.5px solid #f5a0a0; color: #c0392b; padding: 12px; border-radius: var(--radius); font-size: 14px; font-weight: 600; text-align: center; margin-top: 10px; display: none; }
-  .error-msg.show { display: block; }
+  .hasil-item { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; background:rgba(255,255,255,0.07); border-radius:8px; margin-bottom:5px; }
+  .hasil-item-name { font-size:14px; font-weight:500; color:rgba(255,255,255,0.85); }
+  .hasil-item-val { text-align:right; }
+  .hasil-item-val .meter { font-size:12px; color:rgba(255,255,255,0.5); }
+  .hasil-item-val .batang { font-size:16px; font-weight:800; color:#fff; }
+  .hasil-item-val .batang span { font-size:12px; font-weight:500; color:rgba(255,255,255,0.6); }
+  .luas-chip { display:inline-block; background:rgba(58,155,213,0.2); color:var(--accent); font-size:13px; font-weight:700; padding:5px 12px; border-radius:8px; margin-bottom:14px; }
+  .divider { border:none; border-top:1px solid rgba(255,255,255,0.1); margin:14px 0; }
+  .note { font-size:12px; color:var(--muted); text-align:center; margin-top:10px; }
+  .error-msg { background:#fff0f0; border:1.5px solid #f5a0a0; color:#c0392b; padding:12px; border-radius:var(--radius); font-size:14px; font-weight:600; text-align:center; margin-top:10px; display:none; }
+  .error-msg.show { display:block; }
 </style>
 </head>
 <body>
@@ -95,7 +94,6 @@
     <p>Hitung kebutuhan material otomatis & presisi</p>
   </div>
 
-  <!-- KONSUMEN -->
   <div class="card">
     <div class="card-title">Data Konsumen</div>
     <div class="input-group">
@@ -104,7 +102,6 @@
     </div>
   </div>
 
-  <!-- BENTUK -->
   <div class="card">
     <div class="card-title">Bentuk Kanopi</div>
     <div class="toggle-group" id="bentukToggle">
@@ -113,7 +110,6 @@
     </div>
   </div>
 
-  <!-- ATAP -->
   <div class="card">
     <div class="card-title">Jenis Atap</div>
     <div class="atap-group">
@@ -122,7 +118,6 @@
     </div>
   </div>
 
-  <!-- PERSEGI -->
   <div class="card" id="kotakForm">
     <div class="card-title">Dimensi Area</div>
     <div class="input-row">
@@ -137,7 +132,6 @@
     </div>
   </div>
 
-  <!-- L SHAPE -->
   <div class="card" id="LForm" style="display:none">
     <div class="card-title">Dimensi L Shape</div>
     <div class="area-label">Area A — bagian lebih besar</div>
@@ -164,7 +158,6 @@
     </div>
   </div>
 
-  <!-- OPSI TAMBAHAN -->
   <div class="card">
     <div class="card-title">Opsi Tambahan</div>
     <div class="input-group" style="margin-bottom:16px">
@@ -180,7 +173,6 @@
     </div>
   </div>
 
-  <!-- TIANG & GELAGAR -->
   <div class="card">
     <div class="card-title">Tiang &amp; Gelagar</div>
     <div class="card-title" style="margin-bottom:8px">Material</div>
@@ -210,14 +202,12 @@
     </div>
   </div>
 
-  <!-- ACTION BUTTONS -->
   <div class="btn-row">
     <button class="btn-hitung" onclick="hitung()">HITUNG MATERIAL</button>
     <button class="btn-reset" onclick="doReset()" title="Reset semua input">↺</button>
   </div>
   <div class="error-msg" id="errorMsg"></div>
 
-  <!-- HASIL -->
   <div class="hasil-card" id="hasilCard">
     <div class="hasil-header">
       <div class="hasil-meta">
@@ -236,144 +226,99 @@
 <script>
   let bentuk='kotak', atapEff=0.83, atapNama='Twinwall', cordoba=0, strukturMat='none', adaGelagar=false;
 
-  function setBentuk(val,el){
-    bentuk=val;
-    document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('kotakForm').style.display=val==='kotak'?'block':'none';
-    document.getElementById('LForm').style.display=val==='L'?'block':'none';
-    clearHasil();
-  }
-  function setAtap(eff,nama,el){
-    atapEff=parseFloat(eff); atapNama=nama;
-    document.querySelectorAll('.atap-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active'); clearHasil();
-  }
-  function setCordoba(val,el){
-    cordoba=val;
-    document.querySelectorAll('.cordoba-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-  }
-  function setStruktur(val,el){
-    strukturMat=val;
-    document.getElementById('strukturToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('strukturForm').style.display=val==='none'?'none':'block';
-    if(val==='none') adaGelagar=false;
-    clearHasil();
-  }
-  function setGelagar(val,el){
-    adaGelagar=val;
-    document.getElementById('gelagarToggle').querySelectorAll('.gelagar-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-  }
+  function setBentuk(v,el){bentuk=v;document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('kotakForm').style.display=v==='kotak'?'block':'none';document.getElementById('LForm').style.display=v==='L'?'block':'none';clearHasil();}
+  function setAtap(e,n,el){atapEff=parseFloat(e);atapNama=n;document.querySelectorAll('.atap-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');clearHasil();}
+  function setCordoba(v,el){cordoba=v;document.querySelectorAll('.cordoba-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+  function setStruktur(v,el){strukturMat=v;document.getElementById('strukturToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('strukturForm').style.display=v==='none'?'none':'block';if(v==='none')adaGelagar=false;clearHasil();}
+  function setGelagar(v,el){adaGelagar=v;document.getElementById('gelagarToggle').querySelectorAll('.gelagar-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
 
   function doReset(){
-    ['lebar','panjang','a1','a2','b1','b2','talang','jmlTiang','tinggiTiang','namaKonsumen']
-      .forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-    setBentuk('kotak', document.getElementById('bentukToggle').querySelectorAll('.toggle-btn')[0]);
+    ['lebar','panjang','a1','a2','b1','b2','talang','jmlTiang','tinggiTiang','namaKonsumen'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    setBentuk('kotak',document.getElementById('bentukToggle').querySelectorAll('.toggle-btn')[0]);
     document.querySelectorAll('.atap-btn')[0].click();
     document.querySelectorAll('.cordoba-btn')[0].click();
     document.getElementById('strukturToggle').querySelectorAll('.toggle-btn')[0].click();
-    clearHasil();
-    window.scrollTo({top:0,behavior:'smooth'});
+    clearHasil();window.scrollTo({top:0,behavior:'smooth'});
   }
+  function clearHasil(){document.getElementById('hasilCard').classList.remove('show');document.getElementById('errorMsg').classList.remove('show');document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));}
+  function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
 
-  function clearHasil(){
-    document.getElementById('hasilCard').classList.remove('show');
-    document.getElementById('errorMsg').classList.remove('show');
-    document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
-  }
-  function showError(msg, ids){
-    const e=document.getElementById('errorMsg');
-    e.textContent=msg; e.classList.add('show');
-    document.getElementById('hasilCard').classList.remove('show');
-    if(ids) ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});
-  }
+  function stok(p){return p<=3?'3':p<=4?'4':p<=6?'6':p.toFixed(1)+' (custom)';}
+  function btg(m){return Math.ceil(m/6);}
+  function itemRow(n,m){return `<div class="hasil-item"><div class="hasil-item-name">${n}</div><div class="hasil-item-val"><div class="meter">${m.toFixed(1)} m</div><div class="batang">${btg(m)} <span>batang</span></div></div></div>`;}
+  function lembarRow(n,p,j){return `<div class="hasil-item"><div class="hasil-item-name">${n}</div><div class="hasil-item-val"><div class="meter">p. ${stok(p)} m</div><div class="batang">${j} <span>lembar</span></div></div></div>`;}
 
-  function stok(p){ return p<=3?'3':p<=4?'4':p<=6?'6':p.toFixed(1)+' (custom)'; }
-  function btg(m){ return Math.ceil(m/6); }
-
-  function itemRow(nama,meter){
-    return `<div class="hasil-item"><div class="hasil-item-name">${nama}</div><div class="hasil-item-val"><div class="meter">${meter.toFixed(1)} m</div><div class="batang">${btg(meter)} <span>batang</span></div></div></div>`;
-  }
-  function lembarRow(nama,pjg,jml){
-    return `<div class="hasil-item"><div class="hasil-item-name">${nama}</div><div class="hasil-item-val"><div class="meter">p. ${stok(pjg)} m</div><div class="batang">${jml} <span>lembar</span></div></div></div>`;
-  }
+  // ── hasil data store ──
+  let _hasilData = null;
 
   function hitung(){
     clearHasil();
-
-    const nama = document.getElementById('namaKonsumen').value.trim();
-    if(!nama){ showError('⚠ Isi nama konsumen dulu.',['namaKonsumen']); return; }
-
+    const nama=document.getElementById('namaKonsumen').value.trim();
+    if(!nama){showError('⚠ Isi nama konsumen dulu.',['namaKonsumen']);return;}
     const talang=parseFloat(document.getElementById('talang').value)||0;
     let luas=0,h510=0,h46=0,bentangAtap=0,lebarTotal=0,atapRows='';
+    let _atapItems=[], _hollowItems=[], _strukturItems=[], _talangItems=[];
 
     if(bentuk==='kotak'){
       const lebar=parseFloat(document.getElementById('lebar').value);
       const panjang=parseFloat(document.getElementById('panjang').value);
-      if(!lebar||!panjang){ showError('⚠ Isi Lebar Area dan Panjang (arah air) dulu.',['lebar','panjang']); return; }
-      luas=lebar*panjang; bentangAtap=panjang; lebarTotal=lebar;
+      if(!lebar||!panjang){showError('⚠ Isi Lebar Area dan Panjang (arah air) dulu.',['lebar','panjang']);return;}
+      luas=lebar*panjang;bentangAtap=panjang;lebarTotal=lebar;
       const lembar=Math.ceil(lebar/atapEff);
-      h510=2*(lebar+panjang); if(talang>0) h510+=lebar;
+      h510=2*(lebar+panjang);if(talang>0)h510+=lebar;
       h46=(lebar*3)+(panjang*4);
       atapRows=lembarRow(atapNama,bentangAtap,lembar);
+      _atapItems=[{nama:atapNama,detail:`p. ${stok(bentangAtap)} m`,nilai:`${lembar} lembar`}];
     } else {
       const a1=parseFloat(document.getElementById('a1').value);
       const a2=parseFloat(document.getElementById('a2').value);
       const b1=parseFloat(document.getElementById('b1').value);
       const b2=parseFloat(document.getElementById('b2').value);
-      if(!a1||!a2||!b1||!b2){ showError('⚠ Isi semua dimensi L Shape dulu.',['a1','a2','b1','b2']); return; }
-      luas=(a1*a2)+(b1*b2); bentangAtap=Math.max(a2,b2); lebarTotal=a1+b1;
-      const lembarTotal=Math.ceil(a1/atapEff);
-      const lembarB=Math.ceil(b1/atapEff);
-      const lembarA=lembarTotal-lembarB;
+      if(!a1||!a2||!b1||!b2){showError('⚠ Isi semua dimensi L Shape dulu.',['a1','a2','b1','b2']);return;}
+      luas=(a1*a2)+(b1*b2);bentangAtap=Math.max(a2,b2);lebarTotal=a1+b1;
+      const lT=Math.ceil(a1/atapEff),lB=Math.ceil(b1/atapEff),lA=lT-lB;
       let h510A=2*(a1+a2),h510B=2*(b1+b2);
       if(talang>0){h510A+=a1;h510B+=b1;}
-      h510=h510A+h510B;
-      h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
-      if(a2===b2||lembarA===0){
-        atapRows=lembarRow(atapNama,a2,lembarTotal);
+      h510=h510A+h510B;h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
+      if(a2===b2||lA===0){
+        atapRows=lembarRow(atapNama,a2,lT);
+        _atapItems=[{nama:atapNama,detail:`p. ${stok(a2)} m`,nilai:`${lT} lembar`}];
       } else {
-        atapRows=(lembarB>0?lembarRow(`${atapNama} (melewati A+B)`,a2,lembarB):'')
-                +(lembarA>0?lembarRow(`${atapNama} (area A saja)`,a2,lembarA):'');
+        atapRows=(lB>0?lembarRow(`${atapNama} (melewati A+B)`,a2,lB):'')+(lA>0?lembarRow(`${atapNama} (area A saja)`,a2,lA):'');
+        _atapItems=[];
+        if(lB>0)_atapItems.push({nama:`${atapNama} (melewati A+B)`,detail:`p. ${stok(a2)} m`,nilai:`${lB} lembar`});
+        if(lA>0)_atapItems.push({nama:`${atapNama} (area A saja)`,detail:`p. ${stok(a2)} m`,nilai:`${lA} lembar`});
       }
     }
 
-    // Validasi tiang
     if(strukturMat!=='none'){
       const jt=parseInt(document.getElementById('jmlTiang').value);
       const tt=parseFloat(document.getElementById('tinggiTiang').value);
-      if(!jt||jt<=0){ showError('⚠ Isi jumlah tiang (wajib jika pakai material tiang).',['jmlTiang']); return; }
-      if(!tt||tt<=0){ showError('⚠ Isi tinggi tiang (wajib jika pakai material tiang).',['tinggiTiang']); return; }
+      if(!jt||jt<=0){showError('⚠ Isi jumlah tiang.',['jmlTiang']);return;}
+      if(!tt||tt<=0){showError('⚠ Isi tinggi tiang.',['tinggiTiang']);return;}
     }
 
     const jmlTiang=parseInt(document.getElementById('jmlTiang').value)||0;
     const tinggiTiang=parseFloat(document.getElementById('tinggiTiang').value)||0;
-    const pTiang=jmlTiang*tinggiTiang;
-    const pGelagar=adaGelagar?lebarTotal:0;
-    const totalStr=pTiang+pGelagar;
-
-    const adaTalang=talang>0;
-    const eser=adaTalang?talang*0.30:0;
-    const lembarEser=adaTalang?Math.ceil(eser/2.88):0;
-
+    const pTiang=jmlTiang*tinggiTiang, pGelagar=adaGelagar?lebarTotal:0, totalStr=pTiang+pGelagar;
+    const adaTalang=talang>0, eser=adaTalang?talang*0.30:0, lembarEser=adaTalang?Math.ceil(eser/2.88):0;
     let c44=0,c24=0;
     if(cordoba===1){c44=lebarTotal;c24=lebarTotal;}
     if(cordoba===2){c44=lebarTotal+bentangAtap;c24=lebarTotal+bentangAtap;}
     if(cordoba===3){c44=(2*bentangAtap)+lebarTotal;c24=(2*bentangAtap)+lebarTotal;}
 
-    let html=`
-      <div class="luas-chip">📐 Luas total: ${luas.toFixed(2)} m²</div>
-      <div class="hasil-section">
-        <div class="hasil-section-label">🔷 Atap</div>${atapRows}
-      </div>
+    _hollowItems=[
+      {nama:'Hollow 5×10',detail:`${h510.toFixed(1)} m`,nilai:`${btg(h510)} batang`},
+      {nama:'Hollow 4×6',detail:`${h46.toFixed(1)} m`,nilai:`${btg(h46)} batang`},
+    ];
+    if(c44>0)_hollowItems.push({nama:'Hollow 4×4 (Cordoba)',detail:`${c44.toFixed(1)} m`,nilai:`${btg(c44)} batang`});
+    if(c24>0)_hollowItems.push({nama:'Hollow 2×4 (Cordoba)',detail:`${c24.toFixed(1)} m`,nilai:`${btg(c24)} batang`});
+
+    let html=`<div class="luas-chip">📐 Luas total: ${luas.toFixed(2)} m²</div>
+      <div class="hasil-section"><div class="hasil-section-label">🔷 Atap</div>${atapRows}</div>
       <hr class="divider">
-      <div class="hasil-section">
-        <div class="hasil-section-label">🔩 Hollow</div>
-        ${itemRow('Hollow 5×10',h510)}
-        ${itemRow('Hollow 4×6',h46)}
+      <div class="hasil-section"><div class="hasil-section-label">🔩 Hollow</div>
+        ${itemRow('Hollow 5×10',h510)}${itemRow('Hollow 4×6',h46)}
         ${c44>0?itemRow('Hollow 4×4 (Cordoba)',c44):''}
         ${c24>0?itemRow('Hollow 2×4 (Cordoba)',c24):''}
       </div>`;
@@ -381,23 +326,20 @@
     if(strukturMat!=='none'&&(jmlTiang>0||adaGelagar)){
       const lbl=strukturMat==='hollow'?'Hollow 10×10':'Besi WF 150';
       const ico=strukturMat==='hollow'?'🏗':'⚙️';
-      html+=`<hr class="divider"><div class="hasil-section">
-        <div class="hasil-section-label">${ico} Tiang &amp; Gelagar — ${lbl}</div>
+      if(jmlTiang>0)_strukturItems.push({nama:`${lbl} — Tiang ×${jmlTiang} (${tinggiTiang}m)`,detail:`${pTiang.toFixed(1)} m`,nilai:`${btg(pTiang)} batang`});
+      if(adaGelagar)_strukturItems.push({nama:`${lbl} — Gelagar (lebar ${lebarTotal}m)`,detail:`${pGelagar.toFixed(1)} m`,nilai:`${btg(pGelagar)} batang`});
+      if(jmlTiang>0&&adaGelagar)_strukturItems.push({nama:`TOTAL ${lbl}`,detail:`${totalStr.toFixed(1)} m`,nilai:`${Math.ceil(totalStr/6)} batang`,bold:true});
+      html+=`<hr class="divider"><div class="hasil-section"><div class="hasil-section-label">${ico} Tiang &amp; Gelagar — ${lbl}</div>
         ${jmlTiang>0?itemRow(`${lbl} — Tiang ×${jmlTiang} (${tinggiTiang}m)`,pTiang):''}
         ${adaGelagar?itemRow(`${lbl} — Gelagar (lebar ${lebarTotal}m)`,pGelagar):''}
-        ${(jmlTiang>0&&adaGelagar)?`<div class="hasil-item" style="background:rgba(58,155,213,0.15)">
-          <div class="hasil-item-name" style="font-weight:700">Total ${lbl}</div>
-          <div class="hasil-item-val"><div class="meter">${totalStr.toFixed(1)} m</div>
-          <div class="batang">${Math.ceil(totalStr/6)} <span>batang</span></div></div></div>`:''}
+        ${(jmlTiang>0&&adaGelagar)?`<div class="hasil-item" style="background:rgba(58,155,213,0.15)"><div class="hasil-item-name" style="font-weight:700">Total ${lbl}</div><div class="hasil-item-val"><div class="meter">${totalStr.toFixed(1)} m</div><div class="batang">${Math.ceil(totalStr/6)} <span>batang</span></div></div></div>`:''}
       </div>`;
     }
 
     if(adaTalang){
-      html+=`<hr class="divider"><div class="hasil-section">
-        <div class="hasil-section-label">💧 Talang</div>
-        <div class="hasil-item"><div class="hasil-item-name">Plat Eser</div>
-        <div class="hasil-item-val"><div class="meter">${eser.toFixed(2)} m²</div>
-        <div class="batang">${lembarEser} <span>lembar</span></div></div></div>
+      _talangItems=[{nama:'Plat Eser',detail:`${eser.toFixed(2)} m²`,nilai:`${lembarEser} lembar`}];
+      html+=`<hr class="divider"><div class="hasil-section"><div class="hasil-section-label">💧 Talang</div>
+        <div class="hasil-item"><div class="hasil-item-name">Plat Eser</div><div class="hasil-item-val"><div class="meter">${eser.toFixed(2)} m²</div><div class="batang">${lembarEser} <span>lembar</span></div></div></div>
       </div>`;
     }
 
@@ -407,25 +349,146 @@
     document.getElementById('hasilTanggal').textContent=tgl;
     document.getElementById('hasilInner').innerHTML=html;
     document.getElementById('hasilCard').classList.add('show');
+
+    // Store data for PNG export
+    _hasilData={
+      nama, tgl, luas,
+      atap:_atapItems, hollow:_hollowItems,
+      struktur:_strukturItems, talang:_talangItems,
+      strukturLabel: strukturMat==='hollow'?'Hollow 10×10': strukturMat==='wf'?'Besi WF 150':''
+    };
+
     setTimeout(()=>document.getElementById('hasilCard').scrollIntoView({behavior:'smooth',block:'start'}),100);
   }
 
+  // ── PNG EXPORT — drawn via Canvas API, no external library ──
   function simpanPNG(){
+    if(!_hasilData){alert('Hitung dulu sebelum simpan.');return;}
     const btn=document.getElementById('btnSimpan');
-    btn.classList.add('loading'); btn.textContent='⏳ Menyimpan...';
-    html2canvas(document.getElementById('hasilCard'),{
-      backgroundColor:'#0f2d4a', scale:2, useCORS:true, logging:false
-    }).then(canvas=>{
-      const nama=document.getElementById('hasilNama').textContent.replace(/\s+/g,'_')||'estimasi';
-      const a=document.createElement('a');
-      a.download=`Estimasi_${nama}.png`;
-      a.href=canvas.toDataURL('image/png');
-      a.click();
-      btn.classList.remove('loading'); btn.innerHTML='💾 Simpan PNG';
-    }).catch(()=>{
-      btn.classList.remove('loading'); btn.innerHTML='💾 Simpan PNG';
-      alert('Gagal menyimpan, coba lagi.');
+    btn.classList.add('loading');btn.textContent='⏳...';
+
+    const d=_hasilData;
+    const W=680, PAD=32;
+    const NAVY='#0f2d4a', ACCENT='#3a9bd5', WHITE='#ffffff', LGRAY='#f0f4f8', DGRAY='#7a8fa6';
+    const ROWH=46, SECGAP=18, HEADH=90;
+
+    // Calculate total height
+    function countRows(arr){return arr?arr.length:0;}
+    const sections=[];
+    if(d.atap.length)    sections.push({label:'ATAP',       icon:'◈', items:d.atap});
+    if(d.hollow.length)  sections.push({label:'HOLLOW',     icon:'◉', items:d.hollow});
+    if(d.struktur.length)sections.push({label:'TIANG & GELAGAR', icon:'◆', items:d.struktur});
+    if(d.talang.length)  sections.push({label:'TALANG',     icon:'◇', items:d.talang});
+
+    const totalRows=sections.reduce((a,s)=>a+s.items.length,0);
+    const H=HEADH + 56 + sections.length*(SECGAP+24) + totalRows*ROWH + 60;
+
+    const canvas=document.createElement('canvas');
+    const DPR=2;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(DPR,DPR);
+
+    // ── Background ──
+    ctx.fillStyle=WHITE; ctx.fillRect(0,0,W,H);
+
+    // ── Header band ──
+    ctx.fillStyle=NAVY; ctx.beginPath();
+    roundRect(ctx,0,0,W,HEADH,0); ctx.fill();
+
+    // badge
+    ctx.fillStyle=ACCENT;
+    ctx.font='bold 10px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText('⚡ PAVILION KANOPI BOGOR', PAD, 30);
+
+    ctx.fillStyle=WHITE;
+    ctx.font='bold 20px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText(d.nama, PAD, 58);
+
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.font='12px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText(d.tgl, PAD, 78);
+
+    // luas chip
+    const luasText=`Luas total: ${d.luas.toFixed(2)} m²`;
+    ctx.font='bold 13px -apple-system,Segoe UI,sans-serif';
+    const ltW=ctx.measureText(luasText).width+24;
+    ctx.fillStyle='#e8f4fb';
+    roundRect(ctx, PAD, HEADH+14, ltW, 30, 8); ctx.fill();
+    ctx.fillStyle=ACCENT;
+    ctx.fillText(luasText, PAD+12, HEADH+34);
+
+    // ── Sections ──
+    let y=HEADH+60;
+    sections.forEach((sec,si)=>{
+      // Section label
+      ctx.fillStyle=ACCENT;
+      ctx.font='bold 10px -apple-system,Segoe UI,sans-serif';
+      ctx.fillText(`${sec.icon}  ${sec.label}`, PAD, y+14);
+      y+=SECGAP+14;
+
+      sec.items.forEach((item,ii)=>{
+        const rowBg=item.bold?'#dbeeff': (ii%2===0?LGRAY:'#e8edf2');
+        ctx.fillStyle=rowBg;
+        roundRect(ctx,PAD,y,W-PAD*2,ROWH-4,8);ctx.fill();
+
+        // name
+        ctx.fillStyle=item.bold?NAVY:'#1a2b3c';
+        ctx.font=`${item.bold?'bold ':''}14px -apple-system,Segoe UI,sans-serif`;
+        // truncate long names
+        let nm=item.nama;
+        if(ctx.measureText(nm).width > W-PAD*2-160) {
+          while(ctx.measureText(nm+'…').width > W-PAD*2-160 && nm.length>0) nm=nm.slice(0,-1);
+          nm+='…';
+        }
+        ctx.fillText(nm, PAD+12, y+17);
+
+        // detail (meter/lembar info) — right align
+        ctx.fillStyle=DGRAY;
+        ctx.font='11px -apple-system,Segoe UI,sans-serif';
+        const detW=ctx.measureText(item.detail).width;
+        ctx.fillText(item.detail, W-PAD-120-detW/2, y+15);
+
+        // nilai (batang/lembar count) — right
+        ctx.fillStyle=item.bold?NAVY:NAVY;
+        ctx.font=`bold 16px -apple-system,Segoe UI,sans-serif`;
+        const valW=ctx.measureText(item.nilai).width;
+        ctx.fillText(item.nilai, W-PAD-valW, y+20);
+
+        y+=ROWH;
+      });
+
+      // divider between sections
+      if(si<sections.length-1){
+        ctx.strokeStyle='#d4dde8'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(PAD,y+6); ctx.lineTo(W-PAD,y+6); ctx.stroke();
+        y+=14;
+      }
     });
+
+    // footer
+    y+=14;
+    ctx.fillStyle=DGRAY;
+    ctx.font='11px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText('* Batang hollow = panjang 6 meter  ·  Dibuat dengan Pavilion Estimator', PAD, y+14);
+
+    // download
+    const fname=d.nama.replace(/\s+/g,'_')||'estimasi';
+    const a=document.createElement('a');
+    a.download=`Estimasi_${fname}.png`;
+    a.href=canvas.toDataURL('image/png');
+    a.click();
+    btn.classList.remove('loading'); btn.innerHTML='💾 Simpan PNG';
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    ctx.closePath();
   }
 </script>
 </body>
