@@ -1,182 +1,432 @@
-```html
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pavilion Estimator MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-body{font-family:Arial;max-width:560px;margin:auto;padding:20px;background:#f2f4f7}
-.box{background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.1)}
-h1{text-align:center;color:#12395b;font-size:24px}
-input,select,button{width:100%;padding:12px;margin-top:10px;font-size:16px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
-button{background:#12395b;color:#fff;font-weight:bold;border:none}
-#hasil{margin-top:20px;line-height:1.8;font-size:16px}
-label{font-weight:bold;margin-top:10px;display:block}
-small{color:#666}
+  :root {
+    --navy: #0f2d4a; --navy-mid: #1a4568; --accent: #3a9bd5;
+    --accent-light: #e8f4fb; --bg: #eef2f7; --card: #ffffff;
+    --text: #1a2b3c; --muted: #7a8fa6; --border: #d4dde8; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); min-height: 100vh; padding: 24px 16px 48px; color: var(--text); }
+  .wrapper { max-width: 520px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 20px; }
+  .header-badge { display: inline-block; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+  .header p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  .card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 2px 16px rgba(15,45,74,0.07); margin-bottom: 14px; }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .toggle-btn { padding: 10px; border: 2px solid var(--border); border-radius: var(--radius); background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .toggle-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--navy); }
+
+  .atap-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .atap-btn { padding: 12px; border: 2px solid var(--border); border-radius: var(--radius); background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: center; }
+  .atap-btn small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+  .atap-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--navy); }
+  .atap-btn.active small { color: var(--accent); }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-group label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px; }
+  .input-group input { padding: 11px 13px; border: 1.5px solid var(--border); border-radius: var(--radius); font-family: inherit; font-size: 15px; font-weight: 600; color: var(--text); background: #fafcfe; transition: border-color 0.15s; width: 100%; }
+  .input-group input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .input-group input.err { border-color: #e74c3c !important; background: #fff8f8; }
+  .input-group input::placeholder { color: var(--border); font-weight: 400; }
+
+  .area-label { font-size: 12px; font-weight: 700; color: var(--navy); background: var(--accent-light); display: inline-block; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; }
+
+  .cordoba-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .cordoba-btn { padding: 9px 4px; border: 2px solid var(--border); border-radius: var(--radius); background: transparent; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: center; }
+  .cordoba-btn.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+
+  .btn-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 4px; }
+  .btn-hitung { padding: 16px; background: var(--navy); color: #fff; border: none; border-radius: var(--radius); font-family: inherit; font-size: 16px; font-weight: 800; letter-spacing: 0.5px; cursor: pointer; transition: background 0.18s, transform 0.1s; }
+  .btn-hitung:hover { background: var(--navy-mid); }
+  .btn-hitung:active { transform: scale(0.98); }
+  .btn-reset { padding: 16px 20px; background: transparent; color: var(--muted); border: 2px solid var(--border); border-radius: var(--radius); font-family: inherit; font-size: 22px; cursor: pointer; transition: all 0.18s; }
+  .btn-reset:hover { border-color: #e74c3c; color: #e74c3c; }
+
+  .hasil-card { background: var(--navy); border-radius: 16px; padding: 20px; color: #fff; display: none; animation: slideUp 0.3s ease; margin-top: 14px; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .hasil-card.show { display: block; }
+
+  .hasil-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 10px; }
+  .hasil-meta {}
+  .hasil-title-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
+  .hasil-konsumen { font-size: 16px; font-weight: 800; color: #fff; }
+  .hasil-tanggal { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+  .btn-simpan { flex-shrink: 0; display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; padding: 9px 13px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+  .btn-simpan:hover { background: rgba(255,255,255,0.2); }
+  .btn-simpan:active { transform: scale(0.96); }
+  .btn-simpan.loading { opacity: 0.5; pointer-events: none; }
+
+  .hasil-section { margin-bottom: 16px; }
+  .hasil-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .hasil-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: rgba(255,255,255,0.07); border-radius: 8px; margin-bottom: 5px; }
+  .hasil-item-name { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .hasil-item-val { text-align: right; }
+  .hasil-item-val .meter { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .hasil-item-val .batang { font-size: 16px; font-weight: 800; color: #fff; }
+  .hasil-item-val .batang span { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6); }
+  .luas-chip { display: inline-block; background: rgba(58,155,213,0.2); color: var(--accent); font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 8px; margin-bottom: 14px; }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 14px 0; }
+
+  .note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
+  .error-msg { background: #fff0f0; border: 1.5px solid #f5a0a0; color: #c0392b; padding: 12px; border-radius: var(--radius); font-size: 14px; font-weight: 600; text-align: center; margin-top: 10px; display: none; }
+  .error-msg.show { display: block; }
 </style>
 </head>
 <body>
+<div class="wrapper">
 
-<div class="box">
+  <div class="header">
+    <div class="header-badge">⚡ Material Estimator</div>
+    <h1>Pavilion Kanopi Bogor</h1>
+    <p>Hitung kebutuhan material otomatis & presisi</p>
+  </div>
 
-<h1>Pavilion Kanopi Bogor</h1>
+  <!-- KONSUMEN -->
+  <div class="card">
+    <div class="card-title">Data Konsumen</div>
+    <div class="input-group">
+      <label>Nama Konsumen <span style="color:#e74c3c">*</span></label>
+      <input id="namaKonsumen" type="text" placeholder="Contoh: Bpk. Budi Santoso">
+    </div>
+  </div>
 
-<label>Bentuk Kanopi</label>
-<select id="bentuk" onchange="ubahForm()">
-<option value="kotak">Persegi</option>
-<option value="L">L Shape</option>
-</select>
+  <!-- BENTUK -->
+  <div class="card">
+    <div class="card-title">Bentuk Kanopi</div>
+    <div class="toggle-group" id="bentukToggle">
+      <button class="toggle-btn active" onclick="setBentuk('kotak',this)">▪ Persegi</button>
+      <button class="toggle-btn" onclick="setBentuk('L',this)">◢ L Shape</button>
+    </div>
+  </div>
 
-<label>Jenis Atap</label>
-<select id="jenis">
-<option value="0.83">Twinwall</option>
-<option value="0.76">RS</option>
-</select>
+  <!-- ATAP -->
+  <div class="card">
+    <div class="card-title">Jenis Atap</div>
+    <div class="atap-group">
+      <button class="atap-btn active" onclick="setAtap('0.83','Twinwall',this)">Twinwall<small>eff. 0.83 m</small></button>
+      <button class="atap-btn" onclick="setAtap('0.76','RS',this)">RS<small>eff. 0.76 m</small></button>
+    </div>
+  </div>
 
-<div id="kotakForm">
-<input id="lebar" type="number" step="0.1" placeholder="Lebar Area (m)">
-<input id="panjang" type="number" step="0.1" placeholder="Bentang Air (m)">
-</div>
+  <!-- PERSEGI -->
+  <div class="card" id="kotakForm">
+    <div class="card-title">Dimensi Area</div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Lebar Area (m)</label>
+        <input id="lebar" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+      <div class="input-group">
+        <label>Panjang — arah air (m)</label>
+        <input id="panjang" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+    </div>
+  </div>
 
-<div id="LForm" style="display:none">
-<input id="a1" type="number" step="0.1" placeholder="Panjang Area A (m)">
-<input id="a2" type="number" step="0.1" placeholder="Lebar Area A (m)">
-<input id="b1" type="number" step="0.1" placeholder="Panjang Area B (m)">
-<input id="b2" type="number" step="0.1" placeholder="Lebar Area B (m)">
-</div>
+  <!-- L SHAPE -->
+  <div class="card" id="LForm" style="display:none">
+    <div class="card-title">Dimensi L Shape</div>
+    <div class="area-label">Area A — bagian lebih besar</div>
+    <div class="input-row" style="margin-bottom:14px">
+      <div class="input-group">
+        <label>Lebar A (m)</label>
+        <input id="a1" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+      <div class="input-group">
+        <label>Panjang A — arah air (m)</label>
+        <input id="a2" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+    </div>
+    <div class="area-label">Area B — bagian lebih kecil</div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Lebar B (m)</label>
+        <input id="b1" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+      <div class="input-group">
+        <label>Panjang B — arah air (m)</label>
+        <input id="b2" type="number" step="0.1" min="0" placeholder="0.0">
+      </div>
+    </div>
+  </div>
 
-<input id="talang" type="number" step="0.1" placeholder="Panjang Talang (opsional)">
+  <!-- OPSI TAMBAHAN -->
+  <div class="card">
+    <div class="card-title">Opsi Tambahan</div>
+    <div class="input-group" style="margin-bottom:16px">
+      <label>Panjang Talang (opsional)</label>
+      <input id="talang" type="number" step="0.1" min="0" placeholder="0.0 m">
+    </div>
+    <div class="card-title">Cordoba</div>
+    <div class="cordoba-group">
+      <button class="cordoba-btn active" onclick="setCordoba(0,this)">Tidak Ada</button>
+      <button class="cordoba-btn" onclick="setCordoba(1,this)">1 Sisi</button>
+      <button class="cordoba-btn" onclick="setCordoba(2,this)">2 Sisi</button>
+      <button class="cordoba-btn" onclick="setCordoba(3,this)">3 Sisi</button>
+    </div>
+  </div>
 
-<select id="cordoba">
-<option value="0">Cordoba (tidak ada)</option>
-<option value="1">Cordoba 1</option>
-<option value="2">Cordoba 2</option>
-<option value="3">Cordoba 3</option>
-</select>
+  <!-- TIANG & GELAGAR -->
+  <div class="card">
+    <div class="card-title">Tiang &amp; Gelagar</div>
+    <div class="card-title" style="margin-bottom:8px">Material</div>
+    <div class="toggle-group" style="grid-template-columns:1fr 1fr 1fr; margin-bottom:16px" id="strukturToggle">
+      <button class="toggle-btn active" onclick="setStruktur('none',this)">Tidak Ada</button>
+      <button class="toggle-btn" onclick="setStruktur('hollow',this)">Hollow 10×10</button>
+      <button class="toggle-btn" onclick="setStruktur('wf',this)">Besi WF 150</button>
+    </div>
+    <div id="strukturForm" style="display:none">
+      <div class="input-row">
+        <div class="input-group">
+          <label>Jumlah Tiang <span style="color:#e74c3c">*</span></label>
+          <input id="jmlTiang" type="number" step="1" min="0" placeholder="0">
+        </div>
+        <div class="input-group">
+          <label>Tinggi Tiang (m) <span style="color:#e74c3c">*</span></label>
+          <input id="tinggiTiang" type="number" step="0.1" min="0" placeholder="misal: 3">
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="card-title" style="margin-bottom:8px">Gelagar</div>
+        <div class="toggle-group" id="gelagarToggle">
+          <button class="toggle-btn gelagar-btn active" onclick="setGelagar(false,this)">Tidak Ada</button>
+          <button class="toggle-btn gelagar-btn" onclick="setGelagar(true,this)">Ada Gelagar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<button onclick="hitung()">HITUNG MATERIAL</button>
+  <!-- ACTION BUTTONS -->
+  <div class="btn-row">
+    <button class="btn-hitung" onclick="hitung()">HITUNG MATERIAL</button>
+    <button class="btn-reset" onclick="doReset()" title="Reset semua input">↺</button>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
 
-<div id="hasil"></div>
-<small>Batang hollow = panjang 6 meter</small>
+  <!-- HASIL -->
+  <div class="hasil-card" id="hasilCard">
+    <div class="hasil-header">
+      <div class="hasil-meta">
+        <div class="hasil-title-label">📋 Hasil Estimasi</div>
+        <div class="hasil-konsumen" id="hasilNama"></div>
+        <div class="hasil-tanggal" id="hasilTanggal"></div>
+      </div>
+      <button class="btn-simpan" id="btnSimpan" onclick="simpanPNG()">💾 Simpan PNG</button>
+    </div>
+    <div id="hasilInner"></div>
+  </div>
 
+  <p class="note">* Batang hollow = panjang 6 meter · Lembaran atap sesuai panjang bentang</p>
 </div>
 
 <script>
-function ubahForm(){
-let b=document.getElementById("bentuk").value;
-document.getElementById("kotakForm").style.display=b=="kotak"?"block":"none";
-document.getElementById("LForm").style.display=b=="L"?"block":"none";
-}
+  let bentuk='kotak', atapEff=0.83, atapNama='Twinwall', cordoba=0, strukturMat='none', adaGelagar=false;
 
-function stok(p){
-if(p<=3)return 3;
-if(p<=4)return 4;
-if(p<=6)return 6;
-return p.toFixed(1)+" Custom";
-}
+  function setBentuk(val,el){
+    bentuk=val;
+    document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('kotakForm').style.display=val==='kotak'?'block':'none';
+    document.getElementById('LForm').style.display=val==='L'?'block':'none';
+    clearHasil();
+  }
+  function setAtap(eff,nama,el){
+    atapEff=parseFloat(eff); atapNama=nama;
+    document.querySelectorAll('.atap-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active'); clearHasil();
+  }
+  function setCordoba(val,el){
+    cordoba=val;
+    document.querySelectorAll('.cordoba-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function setStruktur(val,el){
+    strukturMat=val;
+    document.getElementById('strukturToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('strukturForm').style.display=val==='none'?'none':'block';
+    if(val==='none') adaGelagar=false;
+    clearHasil();
+  }
+  function setGelagar(val,el){
+    adaGelagar=val;
+    document.getElementById('gelagarToggle').querySelectorAll('.gelagar-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
 
-function batang(x){ return Math.ceil(x/6); }
+  function doReset(){
+    ['lebar','panjang','a1','a2','b1','b2','talang','jmlTiang','tinggiTiang','namaKonsumen']
+      .forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    setBentuk('kotak', document.getElementById('bentukToggle').querySelectorAll('.toggle-btn')[0]);
+    document.querySelectorAll('.atap-btn')[0].click();
+    document.querySelectorAll('.cordoba-btn')[0].click();
+    document.getElementById('strukturToggle').querySelectorAll('.toggle-btn')[0].click();
+    clearHasil();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 
-function hitung(){
+  function clearHasil(){
+    document.getElementById('hasilCard').classList.remove('show');
+    document.getElementById('errorMsg').classList.remove('show');
+    document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
+  }
+  function showError(msg, ids){
+    const e=document.getElementById('errorMsg');
+    e.textContent=msg; e.classList.add('show');
+    document.getElementById('hasilCard').classList.remove('show');
+    if(ids) ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});
+  }
 
-let bentuk=document.getElementById("bentuk").value;
-let eff=parseFloat(document.getElementById("jenis").value);
-let jenis=document.getElementById("jenis").selectedOptions[0].text;
-let talang=parseFloat(document.getElementById("talang").value)||0;
-let cordoba=parseInt(document.getElementById("cordoba").value);
+  function stok(p){ return p<=3?'3':p<=4?'4':p<=6?'6':p.toFixed(1)+' (custom)'; }
+  function btg(m){ return Math.ceil(m/6); }
 
-let luas=0,h510=0,h46=0,lembar=0,bentang=0,lebarHitung=0;
+  function itemRow(nama,meter){
+    return `<div class="hasil-item"><div class="hasil-item-name">${nama}</div><div class="hasil-item-val"><div class="meter">${meter.toFixed(1)} m</div><div class="batang">${btg(meter)} <span>batang</span></div></div></div>`;
+  }
+  function lembarRow(nama,pjg,jml){
+    return `<div class="hasil-item"><div class="hasil-item-name">${nama}</div><div class="hasil-item-val"><div class="meter">p. ${stok(pjg)} m</div><div class="batang">${jml} <span>lembar</span></div></div></div>`;
+  }
 
-if(bentuk=="kotak"){
+  function hitung(){
+    clearHasil();
 
-let lebar=parseFloat(document.getElementById("lebar").value);
-let panjang=parseFloat(document.getElementById("panjang").value);
+    const nama = document.getElementById('namaKonsumen').value.trim();
+    if(!nama){ showError('⚠ Isi nama konsumen dulu.',['namaKonsumen']); return; }
 
-if(!lebar||!panjang){hasil.innerHTML="Isi data dulu";return;}
+    const talang=parseFloat(document.getElementById('talang').value)||0;
+    let luas=0,h510=0,h46=0,bentangAtap=0,lebarTotal=0,atapRows='';
 
-luas=lebar*panjang;
-lebarHitung=lebar;
-bentang=panjang;
+    if(bentuk==='kotak'){
+      const lebar=parseFloat(document.getElementById('lebar').value);
+      const panjang=parseFloat(document.getElementById('panjang').value);
+      if(!lebar||!panjang){ showError('⚠ Isi Lebar Area dan Panjang (arah air) dulu.',['lebar','panjang']); return; }
+      luas=lebar*panjang; bentangAtap=panjang; lebarTotal=lebar;
+      const lembar=Math.ceil(lebar/atapEff);
+      h510=2*(lebar+panjang); if(talang>0) h510+=lebar;
+      h46=(lebar*3)+(panjang*4);
+      atapRows=lembarRow(atapNama,bentangAtap,lembar);
+    } else {
+      const a1=parseFloat(document.getElementById('a1').value);
+      const a2=parseFloat(document.getElementById('a2').value);
+      const b1=parseFloat(document.getElementById('b1').value);
+      const b2=parseFloat(document.getElementById('b2').value);
+      if(!a1||!a2||!b1||!b2){ showError('⚠ Isi semua dimensi L Shape dulu.',['a1','a2','b1','b2']); return; }
+      luas=(a1*a2)+(b1*b2); bentangAtap=Math.max(a2,b2); lebarTotal=a1+b1;
+      const lembarTotal=Math.ceil(a1/atapEff);
+      const lembarB=Math.ceil(b1/atapEff);
+      const lembarA=lembarTotal-lembarB;
+      let h510A=2*(a1+a2),h510B=2*(b1+b2);
+      if(talang>0){h510A+=a1;h510B+=b1;}
+      h510=h510A+h510B;
+      h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
+      if(a2===b2||lembarA===0){
+        atapRows=lembarRow(atapNama,a2,lembarTotal);
+      } else {
+        atapRows=(lembarB>0?lembarRow(`${atapNama} (melewati A+B)`,a2,lembarB):'')
+                +(lembarA>0?lembarRow(`${atapNama} (area A saja)`,a2,lembarA):'');
+      }
+    }
 
-lembar=Math.ceil(lebar/eff);
+    // Validasi tiang
+    if(strukturMat!=='none'){
+      const jt=parseInt(document.getElementById('jmlTiang').value);
+      const tt=parseFloat(document.getElementById('tinggiTiang').value);
+      if(!jt||jt<=0){ showError('⚠ Isi jumlah tiang (wajib jika pakai material tiang).',['jmlTiang']); return; }
+      if(!tt||tt<=0){ showError('⚠ Isi tinggi tiang (wajib jika pakai material tiang).',['tinggiTiang']); return; }
+    }
 
-h510=(2*(lebar+panjang))+lebar;
-h46=(lebar*3)+(panjang*4);
+    const jmlTiang=parseInt(document.getElementById('jmlTiang').value)||0;
+    const tinggiTiang=parseFloat(document.getElementById('tinggiTiang').value)||0;
+    const pTiang=jmlTiang*tinggiTiang;
+    const pGelagar=adaGelagar?lebarTotal:0;
+    const totalStr=pTiang+pGelagar;
 
-}
+    const adaTalang=talang>0;
+    const eser=adaTalang?talang*0.30:0;
+    const lembarEser=adaTalang?Math.ceil(eser/2.88):0;
 
-if(bentuk=="L"){
+    let c44=0,c24=0;
+    if(cordoba===1){c44=lebarTotal;c24=lebarTotal;}
+    if(cordoba===2){c44=lebarTotal+bentangAtap;c24=lebarTotal+bentangAtap;}
+    if(cordoba===3){c44=(2*bentangAtap)+lebarTotal;c24=(2*bentangAtap)+lebarTotal;}
 
-let a1=parseFloat(document.getElementById("a1").value);
-let a2=parseFloat(document.getElementById("a2").value);
-let b1=parseFloat(document.getElementById("b1").value);
-let b2=parseFloat(document.getElementById("b2").value);
+    let html=`
+      <div class="luas-chip">📐 Luas total: ${luas.toFixed(2)} m²</div>
+      <div class="hasil-section">
+        <div class="hasil-section-label">🔷 Atap</div>${atapRows}
+      </div>
+      <hr class="divider">
+      <div class="hasil-section">
+        <div class="hasil-section-label">🔩 Hollow</div>
+        ${itemRow('Hollow 5×10',h510)}
+        ${itemRow('Hollow 4×6',h46)}
+        ${c44>0?itemRow('Hollow 4×4 (Cordoba)',c44):''}
+        ${c24>0?itemRow('Hollow 2×4 (Cordoba)',c24):''}
+      </div>`;
 
-if(!a1||!a2||!b1||!b2){hasil.innerHTML="Isi data L Shape dulu";return;}
+    if(strukturMat!=='none'&&(jmlTiang>0||adaGelagar)){
+      const lbl=strukturMat==='hollow'?'Hollow 10×10':'Besi WF 150';
+      const ico=strukturMat==='hollow'?'🏗':'⚙️';
+      html+=`<hr class="divider"><div class="hasil-section">
+        <div class="hasil-section-label">${ico} Tiang &amp; Gelagar — ${lbl}</div>
+        ${jmlTiang>0?itemRow(`${lbl} — Tiang ×${jmlTiang} (${tinggiTiang}m)`,pTiang):''}
+        ${adaGelagar?itemRow(`${lbl} — Gelagar (lebar ${lebarTotal}m)`,pGelagar):''}
+        ${(jmlTiang>0&&adaGelagar)?`<div class="hasil-item" style="background:rgba(58,155,213,0.15)">
+          <div class="hasil-item-name" style="font-weight:700">Total ${lbl}</div>
+          <div class="hasil-item-val"><div class="meter">${totalStr.toFixed(1)} m</div>
+          <div class="batang">${Math.ceil(totalStr/6)} <span>batang</span></div></div></div>`:''}
+      </div>`;
+    }
 
-luas=(a1*a2)+(b1*b2);
+    if(adaTalang){
+      html+=`<hr class="divider"><div class="hasil-section">
+        <div class="hasil-section-label">💧 Talang</div>
+        <div class="hasil-item"><div class="hasil-item-name">Plat Eser</div>
+        <div class="hasil-item-val"><div class="meter">${eser.toFixed(2)} m²</div>
+        <div class="batang">${lembarEser} <span>lembar</span></div></div></div>
+      </div>`;
+    }
 
-/* atap area terpisah */
-let lembarA=Math.ceil(a1/eff);
-let lembarB=Math.ceil(b1/eff);
+    const now=new Date();
+    const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+    document.getElementById('hasilNama').textContent=nama;
+    document.getElementById('hasilTanggal').textContent=tgl;
+    document.getElementById('hasilInner').innerHTML=html;
+    document.getElementById('hasilCard').classList.add('show');
+    setTimeout(()=>document.getElementById('hasilCard').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  }
 
-lembar=lembarA+lembarB;
-
-bentang=Math.max(a2,b2);
-
-/* hollow area terpisah */
-h510=((2*(a1+a2))+a1)+((2*(b1+b2))+b1);
-h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
-
-lebarHitung=a1+b1;
-}
-
-/* tambah talang */
-if(talang>0){ h510+=talang; }
-
-let eser=0;
-let lembarEser=0;
-
-if(talang>0){
-eser=talang*0.30;
-lembarEser=Math.ceil(eser/2.88);
-}
-
-/* cordoba */
-let c44=0,c24=0;
-
-if(cordoba==1){
-c44=lebarHitung;
-c24=lebarHitung;
-}
-if(cordoba==2){
-c44=lebarHitung+bentang;
-c24=lebarHitung+bentang;
-}
-if(cordoba==3){
-c44=(2*bentang)+lebarHitung;
-c24=(2*bentang)+lebarHitung;
-}
-
-hasil.innerHTML=
-"<hr>"+
-"<b>Bentuk:</b> "+(bentuk=="kotak"?"Persegi":"L Shape")+"<br>"+
-"<b>ATAP:</b><br>"+jenis+" "+stok(bentang)+" m x "+lembar+" lembar<br>"+
-"Luas: "+luas.toFixed(2)+" m²<br><br>"+
-
-"<b>HOLLOW:</b><br>"+
-"5x10 = "+h510.toFixed(1)+" m / "+batang(h510)+" batang<br>"+
-"4x6 = "+h46.toFixed(1)+" m / "+batang(h46)+" batang<br>"+
-
-(c44>0?"4x4 = "+c44.toFixed(1)+" m / "+batang(c44)+" batang<br>":"")+
-(c24>0?"2x4 = "+c24.toFixed(1)+" m / "+batang(c24)+" batang<br>":"")+
-
-(talang>0?"<br><b>TALANG:</b><br>Plat Eser = "+eser.toFixed(2)+" m² / "+lembarEser+" lembar":"");
-
-}
+  function simpanPNG(){
+    const btn=document.getElementById('btnSimpan');
+    btn.classList.add('loading'); btn.textContent='⏳ Menyimpan...';
+    html2canvas(document.getElementById('hasilCard'),{
+      backgroundColor:'#0f2d4a', scale:2, useCORS:true, logging:false
+    }).then(canvas=>{
+      const nama=document.getElementById('hasilNama').textContent.replace(/\s+/g,'_')||'estimasi';
+      const a=document.createElement('a');
+      a.download=`Estimasi_${nama}.png`;
+      a.href=canvas.toDataURL('image/png');
+      a.click();
+      btn.classList.remove('loading'); btn.innerHTML='💾 Simpan PNG';
+    }).catch(()=>{
+      btn.classList.remove('loading'); btn.innerHTML='💾 Simpan PNG';
+      alert('Gagal menyimpan, coba lagi.');
+    });
+  }
 </script>
-
 </body>
 </html>
-```
