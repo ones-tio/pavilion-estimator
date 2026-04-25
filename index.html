@@ -30,7 +30,7 @@
   .toggle-btn { padding: 10px; border: 2px solid var(--border); border-radius: var(--radius); background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .toggle-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--navy); }
 
-  .atap-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .atap-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .atap-btn { padding: 12px; border: 2px solid var(--border); border-radius: var(--radius); background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: center; }
   .atap-btn small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px; }
   .atap-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--navy); }
@@ -83,6 +83,27 @@
   .note { font-size:12px; color:var(--muted); text-align:center; margin-top:10px; }
   .error-msg { background:#fff0f0; border:1.5px solid #f5a0a0; color:#c0392b; padding:12px; border-radius:var(--radius); font-size:14px; font-weight:600; text-align:center; margin-top:10px; display:none; }
   .error-msg.show { display:block; }
+  /* HARGA PANEL */
+  .harga-panel { background:#fff; border-radius:16px; padding:20px; box-shadow:0 2px 16px rgba(15,45,74,0.07); margin-bottom:14px; display:none; }
+  .harga-panel.show { display:block; }
+  .harga-panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .harga-panel-title { font-size:13px; font-weight:800; color:var(--navy); }
+  .btn-tutup-harga { background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; padding:0; }
+  .harga-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .harga-item label { font-size:11px; font-weight:700; color:var(--muted); letter-spacing:0.3px; display:block; margin-bottom:5px; }
+  .harga-item input { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-family:inherit; font-size:14px; font-weight:600; color:var(--text); background:#fafcfe; }
+  .harga-item input:focus { outline:none; border-color:var(--accent); }
+  .btn-simpan-harga { width:100%; margin-top:12px; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+  .btn-atur-harga { display:flex; align-items:center; gap:6px; background:transparent; border:1.5px solid var(--border); color:var(--muted); border-radius:8px; padding:7px 12px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.18s; margin-bottom:14px; }
+  .btn-atur-harga:hover { border-color:var(--accent); color:var(--accent); }
+  /* BIAYA di hasil */
+  .biaya-total { background:rgba(58,155,213,0.15); border-radius:10px; padding:14px; margin-top:10px; }
+  .biaya-total-label { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .biaya-total-val { font-size:22px; font-weight:800; color:#fff; }
+  .biaya-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:13px; }
+  .biaya-row:last-child { border-bottom:none; }
+  .biaya-row-label { color:rgba(255,255,255,0.7); }
+  .biaya-row-val { font-weight:700; color:#fff; }
 </style>
 </head>
 <body>
@@ -115,6 +136,7 @@
     <div class="atap-group">
       <button class="atap-btn active" onclick="setAtap('0.83','Twinwall',this)">Twinwall<small>eff. 0.83 m</small></button>
       <button class="atap-btn" onclick="setAtap('0.76','RS',this)">RS<small>eff. 0.76 m</small></button>
+      <button class="atap-btn" onclick="setAtap('0.86','i86',this)">i86<small>eff. 0.86 m</small></button>
     </div>
   </div>
 
@@ -202,6 +224,28 @@
     </div>
   </div>
 
+  <button class="btn-atur-harga" onclick="toggleHarga()">⚙️ Atur Harga Material</button>
+
+  <!-- PANEL HARGA (tersimpan permanen) -->
+  <div class="harga-panel" id="hargaPanel">
+    <div class="harga-panel-header">
+      <div class="harga-panel-title">💰 Daftar Harga Material</div>
+      <button class="btn-tutup-harga" onclick="toggleHarga()">✕</button>
+    </div>
+    <div class="harga-grid">
+      <div class="harga-item"><label>Twinwall (per meter)</label><input id="h_twinwall" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>RS (per meter)</label><input id="h_rs" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>i86 (per meter)</label><input id="h_i86" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 5×10 (per batang)</label><input id="h_h510" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 4×6 (per batang)</label><input id="h_h46" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 4×4 (per batang)</label><input id="h_h44" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 2×4 (per batang)</label><input id="h_h24" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 10×10 (per batang)</label><input id="h_h1010" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Besi WF 150 (per batang)</label><input id="h_wf150" type="number" min="0" placeholder="0"></div>
+    </div>
+    <button class="btn-simpan-harga" onclick="simpanHarga()">💾 Simpan Harga</button>
+  </div>
+
   <div class="btn-row">
     <button class="btn-hitung" onclick="hitung()">HITUNG MATERIAL</button>
     <button class="btn-reset" onclick="doReset()" title="Reset semua input">↺</button>
@@ -226,6 +270,57 @@
 <script>
   let bentuk='kotak', atapEff=0.83, atapNama='Twinwall', cordoba=0, strukturMat='none', adaGelagar=false;
 
+  // ── HARGA — localStorage ──
+  const HARGA_KEYS = ['h_twinwall','h_rs','h_i86','h_h510','h_h46','h_h44','h_h24','h_h1010','h_wf150'];
+
+  function loadHarga(){
+    HARGA_KEYS.forEach(k=>{
+      const v=localStorage.getItem('harga_'+k);
+      const el=document.getElementById(k);
+      if(el&&v) el.value=v;
+    });
+  }
+
+  function simpanHarga(){
+    HARGA_KEYS.forEach(k=>{
+      const el=document.getElementById(k);
+      if(el) localStorage.setItem('harga_'+k, el.value||'0');
+    });
+    const btn=document.querySelector('.btn-simpan-harga');
+    btn.textContent='✅ Tersimpan!';
+    setTimeout(()=>{btn.textContent='💾 Simpan Harga';},1500);
+  }
+
+  function getHarga(key){ return parseFloat(localStorage.getItem('harga_'+key))||0; }
+
+  function toggleHarga(){
+    const p=document.getElementById('hargaPanel');
+    p.classList.toggle('show');
+  }
+
+  function rp(n){ return 'Rp '+Math.round(n).toLocaleString('id-ID'); }
+
+  function hitungBiaya(params){
+    // params: {atapNama, totalMeterAtap, h510, h46, c44, c24, totalStr, strukturMat}
+    const hAtap = params.atapNama==='Twinwall' ? getHarga('h_twinwall')
+                : params.atapNama==='RS'        ? getHarga('h_rs')
+                : getHarga('h_i86');
+
+    const biayaAtap    = hAtap * params.totalMeterAtap;
+    const biayaH510    = getHarga('h_h510') * btg(params.h510);
+    const biayaH46     = getHarga('h_h46')  * btg(params.h46);
+    const biayaH44     = params.c44>0 ? getHarga('h_h44') * btg(params.c44) : 0;
+    const biayaH24     = params.c24>0 ? getHarga('h_h24') * btg(params.c24) : 0;
+    const hStr         = params.strukturMat==='hollow' ? getHarga('h_h1010') : params.strukturMat==='wf' ? getHarga('h_wf150') : 0;
+    const biayaStr     = hStr * Math.ceil(params.totalStr/6);
+    const total = biayaAtap+biayaH510+biayaH46+biayaH44+biayaH24+biayaStr;
+
+    return {biayaAtap,biayaH510,biayaH46,biayaH44,biayaH24,biayaStr,total};
+  }
+
+  // Load harga saat halaman dibuka
+  window.addEventListener('DOMContentLoaded', loadHarga);
+
   function setBentuk(v,el){bentuk=v;document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('kotakForm').style.display=v==='kotak'?'block':'none';document.getElementById('LForm').style.display=v==='L'?'block':'none';clearHasil();}
   function setAtap(e,n,el){atapEff=parseFloat(e);atapNama=n;document.querySelectorAll('.atap-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');clearHasil();}
   function setCordoba(v,el){cordoba=v;document.querySelectorAll('.cordoba-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
@@ -243,7 +338,19 @@
   function clearHasil(){document.getElementById('hasilCard').classList.remove('show');document.getElementById('errorMsg').classList.remove('show');document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));}
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
 
-  function stok(p){return p<=3?'3':p<=4?'4':p<=6?'6':p.toFixed(1)+' (custom)';}
+  // Ukuran stok tersedia per jenis atap
+  const STOK_I86 = [1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7];
+  const STOK_STD = [3, 4, 6]; // Twinwall & RS
+
+  function stokUkuran(p) {
+    // Pilih stok berdasarkan jenis atap aktif
+    const stokList = (atapNama === 'i86') ? STOK_I86 : STOK_STD;
+    const pas = stokList.find(s => s >= p);
+    return pas ? pas.toString().replace('.', ',') : p.toFixed(1) + ' (custom)';
+  }
+
+  // Untuk backward compat di PNG export
+  function stok(p){ return stokUkuran(p); }
   function btg(m){return Math.ceil(m/6);}
   function itemRow(n,m){return `<div class="hasil-item"><div class="hasil-item-name">${n}</div><div class="hasil-item-val"><div class="meter">${m.toFixed(1)} m</div><div class="batang">${btg(m)} <span>batang</span></div></div></div>`;}
   function lembarRow(n,p,j){return `<div class="hasil-item"><div class="hasil-item-name">${n}</div><div class="hasil-item-val"><div class="meter">p. ${stok(p)} m</div><div class="batang">${j} <span>lembar</span></div></div></div>`;}
@@ -257,6 +364,7 @@
     if(!nama){showError('⚠ Isi nama konsumen dulu.',['namaKonsumen']);return;}
     const talang=parseFloat(document.getElementById('talang').value)||0;
     let luas=0,h510=0,h46=0,bentangAtap=0,lebarTotal=0,atapRows='';
+    let wasteM2=0,wastePct=0;
     let _atapItems=[], _hollowItems=[], _strukturItems=[], _talangItems=[];
 
     if(bentuk==='kotak'){
@@ -269,25 +377,92 @@
       h46=(lebar*3)+(panjang*4);
       atapRows=lembarRow(atapNama,bentangAtap,lembar);
       _atapItems=[{nama:atapNama,detail:`p. ${stok(bentangAtap)} m`,nilai:`${lembar} lembar`}];
+      // Waste kotak: luas material dibeli vs luas actual
+      const stokKotak = parseFloat(stokUkuran(panjang));
+      const luasBeli  = lembar * stokKotak * atapEff;
+      wasteM2   = luasBeli - luas;
+      wastePct  = (wasteM2 / luasBeli) * 100;
     } else {
       const a1=parseFloat(document.getElementById('a1').value);
       const a2=parseFloat(document.getElementById('a2').value);
       const b1=parseFloat(document.getElementById('b1').value);
       const b2=parseFloat(document.getElementById('b2').value);
       if(!a1||!a2||!b1||!b2){showError('⚠ Isi semua dimensi L Shape dulu.',['a1','a2','b1','b2']);return;}
-      luas=(a1*a2)+(b1*b2);bentangAtap=Math.max(a2,b2);lebarTotal=a1+b1;
-      const lT=Math.ceil(a1/atapEff),lB=Math.ceil(b1/atapEff),lA=lT-lB;
+      luas=(a1*a2)+(b1*b2); bentangAtap=Math.max(a2,b2); lebarTotal=a1+b1;
       let h510A=2*(a1+a2),h510B=2*(b1+b2);
       if(talang>0){h510A+=a1;h510B+=b1;}
-      h510=h510A+h510B;h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
-      if(a2===b2||lA===0){
-        atapRows=lembarRow(atapNama,a2,lT);
-        _atapItems=[{nama:atapNama,detail:`p. ${stok(a2)} m`,nilai:`${lT} lembar`}];
+      h510=h510A+h510B; h46=((a1*3)+(a2*4))+((b1*3)+(b2*4));
+
+      /*
+       * LOGIKA ATAP L SHAPE — WASTE OPTIMIZATION
+       *
+       * A dan B = dua bidang terpisah, arah air sama.
+       * Lembar A panjang stok(a2), lembar B panjang stok(b2).
+       *
+       * Lembar-lembar A yang lebarnya "overlap" ke zona B
+       * (yaitu lembar yang posisinya di dalam lebar b1)
+       * otomatis punya SISA POTONGAN sepanjang (stokA - a2).
+       * Sisa ini bisa dipakai nutup area B.
+       *
+       * Langkah:
+       * 1. Hitung lembar A total = ceil(a1 / eff)
+       * 2. Dari lembar A, yang berada di zona overlap B = ceil(b1 / eff)
+       *    → sisa potongan tiap lembar itu = stokA - a2
+       *    → total panjang sisa = ceil(b1/eff) × (stokA - a2)
+       * 3. Sisa itu bisa menutup lebar B sebanyak:
+       *    lebarTertutup = floor(totalSisa / b2) × eff  [jika b2 > 0]
+       *    (tiap potongan sisa harus panjangnya >= b2 untuk bisa dipakai)
+       * 4. Lebar B yang belum tertutup = max(0, b1 - lebarTertutupSisa)
+       * 5. Lembar tambahan B = ceil(kekurangan / eff) dengan panjang stok(b2)
+       */
+
+      const stokA = parseFloat(stokUkuran(a2)); // panjang lembar A yang dibeli
+      const stokB = parseFloat(stokUkuran(b2)); // panjang lembar B yang dibeli
+
+      const lembarA_total  = Math.ceil(a1 / atapEff);       // total lembar A
+      const lebarA_actual  = lembarA_total * atapEff;        // lebar aktual terpasang A
+      const overlapKeB     = Math.max(0, lebarA_actual - a1); // kelebihan masuk ke B
+
+      /*
+       * Kalau ada overlap ke B (lebarA_actual > a1),
+       * maka minimal 1 lembar A sudah masuk ke zona B secara fisik.
+       * Lembar B yang perlu dibeli = ceil(b1/eff) - jumlah lembar A yang masuk B
+       */
+      const lembarA_masukB = overlapKeB > 0 ? 1 : 0;
+      const lembarB_total  = Math.ceil(b1 / atapEff);        // total slot B yang perlu ditutup
+      const lembarB_tambah = Math.max(0, lembarB_total - lembarA_masukB);
+      // Waste L Shape: total material dibeli vs luas actual
+      const luasBeliA  = lembarA_total * stokA * atapEff;
+      const luasBeliB  = lembarB_tambah * stokB * atapEff;
+      const luasBeliTotal = luasBeliA + luasBeliB;
+      wasteM2  = luasBeliTotal - luas;
+      wastePct = (wasteM2 / luasBeliTotal) * 100;
+
+      atapRows=''; _atapItems=[];
+
+      // Baris lembar A
+      atapRows += lembarRow(`${atapNama} — Area A`, a2, lembarA_total);
+      _atapItems.push({nama:`${atapNama} — Area A`, detail:`p. ${stokUkuran(a2)} m`, nilai:`${lembarA_total} lembar`});
+
+      // Info sisa / waste
+      if(lembarA_masukB > 0){
+        const infoSisa = `♻ 1 lembar A overlap ke B (${overlapKeB.toFixed(2)}m) → -1 slot B`;
+        atapRows += `<div class="hasil-item" style="background:rgba(46,204,138,0.12)">
+          <div class="hasil-item-name" style="font-size:12px;color:rgba(46,204,138,0.85)">${infoSisa}</div>
+          <div class="hasil-item-val"><div class="meter">${overlapKeB.toFixed(2)} m</div></div>
+        </div>`;
+        _atapItems.push({nama:infoSisa, detail:`${overlapKeB.toFixed(2)} m overlap`, nilai:'♻ -1 slot'});
+      }
+
+      // Lembar tambahan B jika sisa tidak cukup
+      if(lembarB_tambah > 0){
+        atapRows += lembarRow(`${atapNama} — Area B (tambahan)`, b2, lembarB_tambah);
+        _atapItems.push({nama:`${atapNama} — Area B (tambahan)`, detail:`p. ${stokUkuran(b2)} m`, nilai:`${lembarB_tambah} lembar`});
       } else {
-        atapRows=(lB>0?lembarRow(`${atapNama} (melewati A+B)`,a2,lB):'')+(lA>0?lembarRow(`${atapNama} (area A saja)`,a2,lA):'');
-        _atapItems=[];
-        if(lB>0)_atapItems.push({nama:`${atapNama} (melewati A+B)`,detail:`p. ${stok(a2)} m`,nilai:`${lB} lembar`});
-        if(lA>0)_atapItems.push({nama:`${atapNama} (area A saja)`,detail:`p. ${stok(a2)} m`,nilai:`${lA} lembar`});
+        atapRows += `<div class="hasil-item" style="background:rgba(46,204,138,0.12)">
+          <div class="hasil-item-name" style="font-size:12px;color:rgba(46,204,138,0.9)">✅ Area B tertutup penuh oleh sisa potongan A — tidak perlu lembar tambahan</div>
+        </div>`;
+        _atapItems.push({nama:'Area B tertutup sisa A', detail:'', nilai:'✅ tidak perlu beli'});
       }
     }
 
@@ -314,7 +489,42 @@
     if(c44>0)_hollowItems.push({nama:'Hollow 4×4 (Cordoba)',detail:`${c44.toFixed(1)} m`,nilai:`${btg(c44)} batang`});
     if(c24>0)_hollowItems.push({nama:'Hollow 2×4 (Cordoba)',detail:`${c24.toFixed(1)} m`,nilai:`${btg(c24)} batang`});
 
-    let html=`<div class="luas-chip">📐 Luas total: ${luas.toFixed(2)} m²</div>
+    // ── Hitung total meter atap (lembar × panjang stok) ──
+    let totalMeterAtap = 0;
+    if(bentuk==='kotak'){
+      const stokKotakAtap = parseFloat(stokUkuran(bentangAtap));
+      const lembarKotak   = Math.ceil(lebarTotal/atapEff);
+      totalMeterAtap = lembarKotak * stokKotakAtap;
+    } else {
+      const stokAtapA2 = parseFloat(stokUkuran(
+        parseFloat(document.getElementById('a2').value)
+      ));
+      const stokAtapB2 = parseFloat(stokUkuran(
+        parseFloat(document.getElementById('b2').value)
+      ));
+      const _a1=parseFloat(document.getElementById('a1').value);
+      const _b1=parseFloat(document.getElementById('b1').value);
+      const _lembarA=Math.ceil(_a1/atapEff);
+      // lembarB_tambah sudah dihitung di atas tapi out of scope, hitung ulang
+      const _lebarA_actual=_lembarA*atapEff;
+      const _overlapB=Math.max(0,_lebarA_actual-_a1);
+      const _lembarA_masukB=_overlapB>0?1:0;
+      const _lembarB_total=Math.ceil(_b1/atapEff);
+      const _lembarB=Math.max(0,_lembarB_total-_lembarA_masukB);
+      totalMeterAtap = (_lembarA*stokAtapA2) + (_lembarB*stokAtapB2);
+    }
+
+    const biaya = hitungBiaya({atapNama, totalMeterAtap, h510, h46, c44, c24,
+      totalStr: pTiang+pGelagar, strukturMat});
+    const adaHarga = biaya.total > 0;
+
+    // Warna chip waste: hijau <10%, kuning 10-20%, merah >20%
+    const wasteColor = wastePct < 10 ? '#2ecc8a' : wastePct < 20 ? '#f39c12' : '#e74c3c';
+    const wasteIcon  = wastePct < 10 ? '✅' : wastePct < 20 ? '⚠️' : '🔴';
+    let html=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <div class="luas-chip">📐 Luas: ${luas.toFixed(2)} m²</div>
+      <div class="luas-chip" style="background:rgba(0,0,0,0.2);color:${wasteColor}">${wasteIcon} Waste: ${wastePct.toFixed(1)}% (${wasteM2.toFixed(2)} m²)</div>
+    </div>
       <div class="hasil-section"><div class="hasil-section-label">🔷 Atap</div>${atapRows}</div>
       <hr class="divider">
       <div class="hasil-section"><div class="hasil-section-label">🔩 Hollow</div>
@@ -343,6 +553,27 @@
       </div>`;
     }
 
+    // ── BIAYA ──
+    if(adaHarga){
+      const rows=[
+        biaya.biayaAtap>0  ? `<div class="biaya-row"><span class="biaya-row-label">Atap (${totalMeterAtap.toFixed(1)}m)</span><span class="biaya-row-val">${rp(biaya.biayaAtap)}</span></div>` : '',
+        biaya.biayaH510>0  ? `<div class="biaya-row"><span class="biaya-row-label">Hollow 5×10 (${btg(h510)} btg)</span><span class="biaya-row-val">${rp(biaya.biayaH510)}</span></div>` : '',
+        biaya.biayaH46>0   ? `<div class="biaya-row"><span class="biaya-row-label">Hollow 4×6 (${btg(h46)} btg)</span><span class="biaya-row-val">${rp(biaya.biayaH46)}</span></div>` : '',
+        biaya.biayaH44>0   ? `<div class="biaya-row"><span class="biaya-row-label">Hollow 4×4 (${btg(c44)} btg)</span><span class="biaya-row-val">${rp(biaya.biayaH44)}</span></div>` : '',
+        biaya.biayaH24>0   ? `<div class="biaya-row"><span class="biaya-row-label">Hollow 2×4 (${btg(c24)} btg)</span><span class="biaya-row-val">${rp(biaya.biayaH24)}</span></div>` : '',
+        biaya.biayaStr>0   ? `<div class="biaya-row"><span class="biaya-row-label">${strukturMat==='hollow'?'Hollow 10×10':'WF 150'} (${Math.ceil((pTiang+pGelagar)/6)} btg)</span><span class="biaya-row-val">${rp(biaya.biayaStr)}</span></div>` : '',
+      ].filter(Boolean).join('');
+      html+=`<hr class="divider">
+        <div class="hasil-section">
+          <div class="hasil-section-label">💰 Estimasi Biaya Material</div>
+          ${rows}
+          <div class="biaya-total">
+            <div class="biaya-total-label">Grand Total</div>
+            <div class="biaya-total-val">${rp(biaya.total)}</div>
+          </div>
+        </div>`;
+    }
+
     const now=new Date();
     const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
     document.getElementById('hasilNama').textContent=nama;
@@ -353,7 +584,7 @@
     // Store data for PNG export
     _hasilData={
       nama, tgl, luas,
-      atap:_atapItems, hollow:_hollowItems,
+      atap:_atapItems, hollow:_hollowItems, wasteM2, wastePct,
       struktur:_strukturItems, talang:_talangItems,
       strukturLabel: strukturMat==='hollow'?'Hollow 10×10': strukturMat==='wf'?'Besi WF 150':''
     };
@@ -410,13 +641,23 @@
     ctx.fillText(d.tgl, PAD, 78);
 
     // luas chip
-    const luasText=`Luas total: ${d.luas.toFixed(2)} m²`;
+    const luasText=`Luas: ${d.luas.toFixed(2)} m²`;
+    const wasteText=`Waste: ${d.wastePct.toFixed(1)}% (${d.wasteM2.toFixed(2)} m²)`;
     ctx.font='bold 13px -apple-system,Segoe UI,sans-serif';
     const ltW=ctx.measureText(luasText).width+24;
     ctx.fillStyle='#e8f4fb';
     roundRect(ctx, PAD, HEADH+14, ltW, 30, 8); ctx.fill();
     ctx.fillStyle=ACCENT;
     ctx.fillText(luasText, PAD+12, HEADH+34);
+
+    // Waste chip
+    const wColor = d.wastePct < 10 ? '#2ecc8a' : d.wastePct < 20 ? '#f39c12' : '#e74c3c';
+    ctx.font='bold 13px -apple-system,Segoe UI,sans-serif';
+    const wtW = ctx.measureText(wasteText).width + 24;
+    ctx.fillStyle = wColor + '33';
+    roundRect(ctx, PAD + ltW + 10, HEADH+14, wtW, 30, 8); ctx.fill();
+    ctx.fillStyle = wColor;
+    ctx.fillText(wasteText, PAD + ltW + 22, HEADH+34);
 
     // ── Sections ──
     let y=HEADH+60;
