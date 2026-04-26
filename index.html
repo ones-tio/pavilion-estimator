@@ -237,48 +237,8 @@
     </div>
   </div>
 
-  <button class="btn-atur-harga" onclick="toggleHarga()">⚙️ Atur Harga Material</button>
-
-  <!-- PANEL HARGA (tersimpan permanen) -->
-  <div class="harga-panel" id="hargaPanel">
-    <div class="harga-panel-header">
-      <div class="harga-panel-title">💰 Daftar Harga Material</div>
-      <button class="btn-tutup-harga" onclick="toggleHarga()">✕</button>
-    </div>
-    <div class="harga-grid">
-      <div class="harga-item"><label>Twinwall (per meter)</label><input id="h_twinwall" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>RS (per meter)</label><input id="h_rs" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>i86 (per meter)</label><input id="h_i86" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Hollow 5×10 (per batang)</label><input id="h_h510" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Hollow 4×6 (per batang)</label><input id="h_h46" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Hollow 4×4 (per batang)</label><input id="h_h44" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Hollow 2×4 (per batang)</label><input id="h_h24" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Hollow 10×10 (per batang)</label><input id="h_h1010" type="number" min="0" placeholder="0"></div>
-      <div class="harga-item"><label>Besi WF 150 (per batang)</label><input id="h_wf150" type="number" min="0" placeholder="0"></div>
-    </div>
-    <button class="btn-simpan-harga" onclick="simpanHarga()">💾 Simpan Harga</button>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn-hitung" onclick="hitung()">HITUNG MATERIAL</button>
-    <button class="btn-reset" onclick="doReset()" title="Reset semua input">↺</button>
-  </div>
-  <div class="error-msg" id="errorMsg"></div>
-
-  <div class="hasil-card" id="hasilCard">
-    <div class="hasil-header">
-      <div class="hasil-meta">
-        <div class="hasil-title-label">📋 Hasil Estimasi</div>
-        <div class="hasil-konsumen" id="hasilNama"></div>
-        <div class="hasil-tanggal" id="hasilTanggal"></div>
-      </div>
-      <button class="btn-simpan" id="btnSimpan" onclick="simpanPNG()">💾 Simpan PNG</button>
-    </div>
-    <div id="hasilInner"></div>
-  </div>
-
   <!-- BARANG KECIL -->
-  <div class="kecil-card" id="kecilCard">
+  <div class="kecil-card" id="kecilCard" style="margin-bottom:14px">
     <div class="kecil-header" onclick="toggleKecil()">
       <div class="kecil-header-title">🛒 Finishing & Assembly Support</div>
       <div class="kecil-header-toggle" id="kecilToggleIcon">▼</div>
@@ -301,6 +261,72 @@
     </div>
   </div>
 
+  <button class="btn-atur-harga" onclick="toggleHarga()">⚙️ Atur Harga Material</button>
+
+  <!-- PANEL HARGA (tersimpan permanen) -->
+  <div class="harga-panel" id="hargaPanel">
+    <div class="harga-panel-header">
+      <div class="harga-panel-title">💰 Daftar Harga Material</div>
+      <button class="btn-tutup-harga" onclick="toggleHarga()">✕</button>
+    </div>
+    <div class="harga-grid">
+      <div class="harga-item"><label>Twinwall (per meter)</label><input id="h_twinwall" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>RS (per meter)</label><input id="h_rs" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>i86 (per meter)</label><input id="h_i86" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 5×10 (per batang)</label><input id="h_h510" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 4×6 (per batang)</label><input id="h_h46" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 4×4 (per batang)</label><input id="h_h44" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 2×4 (per batang)</label><input id="h_h24" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Hollow 10×10 (per batang)</label><input id="h_h1010" type="number" min="0" placeholder="0"></div>
+      <div class="harga-item"><label>Besi WF 150 (per batang)</label><input id="h_wf150" type="number" min="0" placeholder="0"></div>
+    </div>
+
+    <div style="margin-top:16px;padding-top:14px;border-top:1.5px solid var(--border)">
+      <div class="card-title" style="margin-bottom:10px">Finishing & Assembly Support</div>
+      <div class="harga-grid">
+        <div class="harga-item"><label>Kawat Las 2kg (per dus)</label><input id="hk_kawatLas" type="number" min="0" placeholder="70000"></div>
+        <div class="harga-item"><label>Kawat Tambal (per kg)</label><input id="hk_kawatTambal" type="number" min="0" placeholder="30000"></div>
+        <div class="harga-item"><label>WD Cutting (per dus)</label><input id="hk_wdCutting" type="number" min="0" placeholder="70000"></div>
+        <div class="harga-item"><label>Dempul (per galon)</label><input id="hk_dempul" type="number" min="0" placeholder="105000"></div>
+        <div class="harga-item"><label>Amplas (per meter)</label><input id="hk_amplas" type="number" min="0" placeholder="8000"></div>
+        <div class="harga-item"><label>Epoxy (per kg)</label><input id="hk_epoxy" type="number" min="0" placeholder="90000"></div>
+        <div class="harga-item"><label>Cat Finish (per kg)</label><input id="hk_cat" type="number" min="0" placeholder="70000"></div>
+        <div class="harga-item"><label>Thiner (per galon)</label><input id="hk_thiner" type="number" min="0" placeholder="100000"></div>
+        <div class="harga-item"><label>Dynabolt (per pc)</label><input id="hk_dynabolt" type="number" min="0" placeholder="2000"></div>
+        <div class="harga-item"><label>Koas 1.5in (per pc)</label><input id="hk_koas" type="number" min="0" placeholder="7500"></div>
+        <div class="harga-item"><label>Refil Roll (per pc)</label><input id="hk_refilRoll" type="number" min="0" placeholder="8000"></div>
+        <div class="harga-item"><label>Roofing (per dus)</label><input id="hk_roofing" type="number" min="0" placeholder="58000"></div>
+        <div class="harga-item"><label>Sealant (per botol)</label><input id="hk_sealant" type="number" min="0" placeholder="25000"></div>
+        <div class="harga-item"><label>No Drop (per kg)</label><input id="hk_noDrop" type="number" min="0" placeholder="60000"></div>
+        <div class="harga-item"><label>Serat Tisu (per bungkus)</label><input id="hk_serat" type="number" min="0" placeholder="8000"></div>
+        <div class="harga-item"><label>Paralon 3in (per batang)</label><input id="hk_paralon" type="number" min="0" placeholder="105000"></div>
+        <div class="harga-item"><label>Keni 3in (per pc)</label><input id="hk_keni" type="number" min="0" placeholder="15000"></div>
+        <div class="harga-item"><label>Lem Paralon (per tube)</label><input id="hk_lemParalon" type="number" min="0" placeholder="10000"></div>
+        <div class="harga-item"><label>Seng Galvalum (per meter)</label><input id="hk_sengGalvalum" type="number" min="0" placeholder="45000"></div>
+        <div class="harga-item"><label>Fkinkonte (per kg)</label><input id="hk_fkinkonte" type="number" min="0" placeholder="70000"></div>
+      </div>
+    </div>
+    <button class="btn-simpan-harga" onclick="simpanHarga()">💾 Simpan Harga</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-hitung" onclick="hitung()">HITUNG MATERIAL</button>
+    <button class="btn-reset" onclick="doReset()" title="Reset semua input">↺</button>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="hasil-card" id="hasilCard">
+    <div class="hasil-header">
+      <div class="hasil-meta">
+        <div class="hasil-title-label">📋 Hasil Estimasi</div>
+        <div class="hasil-konsumen" id="hasilNama"></div>
+        <div class="hasil-tanggal" id="hasilTanggal"></div>
+      </div>
+      <button class="btn-simpan" id="btnSimpan" onclick="simpanPNG()">💾 Simpan PNG</button>
+    </div>
+    <div id="hasilInner"></div>
+  </div>
+
   <p class="note">* Batang hollow = panjang 6 meter · Lembaran atap sesuai panjang bentang</p>
 </div>
 
@@ -309,6 +335,8 @@
 
   // ── HARGA — localStorage ──
   const HARGA_KEYS = ['h_twinwall','h_rs','h_i86','h_h510','h_h46','h_h44','h_h24','h_h1010','h_wf150'];
+  const HARGA_KECIL_KEYS = ['kawatLas','kawatTambal','wdCutting','dempul','amplas','epoxy','cat','thiner','dynabolt','koas','refilRoll','roofing','sealant','noDrop','serat','paralon','keni','lemParalon','sengGalvalum','fkinkonte'];
+  const HARGA_KECIL_DEFAULT = {kawatLas:70000,kawatTambal:30000,wdCutting:70000,dempul:105000,amplas:8000,epoxy:90000,cat:70000,thiner:100000,dynabolt:2000,koas:7500,refilRoll:8000,roofing:58000,sealant:25000,noDrop:60000,serat:8000,paralon:105000,keni:15000,lemParalon:10000,sengGalvalum:45000,fkinkonte:70000};
 
   function loadHarga(){
     HARGA_KEYS.forEach(k=>{
@@ -316,12 +344,22 @@
       const el=document.getElementById(k);
       if(el&&v) el.value=v;
     });
+    // Load harga kecil
+    HARGA_KECIL_KEYS.forEach(k=>{
+      const v=localStorage.getItem('hargak_'+k);
+      const el=document.getElementById('hk_'+k);
+      if(el) el.value=v||HARGA_KECIL_DEFAULT[k]||'';
+    });
   }
 
   function simpanHarga(){
     HARGA_KEYS.forEach(k=>{
       const el=document.getElementById(k);
       if(el) localStorage.setItem('harga_'+k, el.value||'0');
+    });
+    HARGA_KECIL_KEYS.forEach(k=>{
+      const el=document.getElementById('hk_'+k);
+      if(el) localStorage.setItem('hargak_'+k, el.value||HARGA_KECIL_DEFAULT[k]);
     });
     const btn=document.querySelector('.btn-simpan-harga');
     btn.textContent='✅ Tersimpan!';
@@ -379,7 +417,14 @@
     document.getElementById('strukturToggle').querySelectorAll('.toggle-btn')[0].click();
     clearHasil();window.scrollTo({top:0,behavior:'smooth'});
   }
-  function clearHasil(){document.getElementById('hasilCard').classList.remove('show');document.getElementById('errorMsg').classList.remove('show');document.getElementById('kecilCard').classList.remove('show');document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));}
+  function clearHasil(){
+    document.getElementById('hasilCard').classList.remove('show');
+    document.getElementById('errorMsg').classList.remove('show');
+    document.getElementById('kecilCard').classList.remove('show');
+    const gt=document.getElementById('grandTotalBox');
+    if(gt) gt.remove();
+    document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
+  }
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
 
   // Ukuran stok tersedia per jenis atap
@@ -645,7 +690,7 @@
 
   // ── DATA BARANG KECIL ──
   const SUMS_DATA = {"kawatLas": [1, 1, 1.5], "kawatTambal": [0.5, 0.75, 1], "wdCutting": [1, 1.5, 2], "dempul": [1, 1.5, 2], "amplas": [5, 6, 7], "epoxy": [3, 4, 5], "cat": [4, 5, 6], "thiner": [3, 3.5, 4], "dynabolt": [50, 50, 60], "koas": [3, 3, 3], "refilRoll": [2, 2, 2], "roofing": [4, 5, 6], "sealant": [6, 9, 11], "noDrop": [1, 1, 2], "serat": [2, 2, 2], "paralon": [1, 1, 1], "keni": [3, 3, 3], "lemParalon": [1, 1, 1], "sengGalvalum": [2, 3, 4], "fkinkonte": [0.5, 0.5, 0.75]};
-  const HARGA_KECIL = {"kawatLas": 70000, "kawatTambal": 30000, "wdCutting": 70000, "dempul": 105000, "amplas": 8000, "epoxy": 90000, "cat": 70000, "thiner": 100000, "dynabolt": 2000, "koas": 7500, "refilRoll": 8000, "roofing": 58000, "sealant": 25000, "noDrop": 60000, "serat": 8000, "paralon": 105000, "keni": 15000, "lemParalon": 10000, "sengGalvalum": 45000, "fkinkonte": 70000};
+  function getHK(k){ return parseFloat(localStorage.getItem('hargak_'+k))||HARGA_KECIL_DEFAULT[k]||0; }
   const LABELS_KECIL = {"kawatLas": ["Kawat Las 2kg", "dus"], "kawatTambal": ["Kawat Tambal", "kg"], "wdCutting": ["WD Cutting", "dus"], "dempul": ["Dempul", "galon"], "amplas": ["Amplas", "m"], "epoxy": ["Epoxy (Cat Dasar)", "kg"], "cat": ["Cat Finish", "kg"], "thiner": ["Thiner", "galon"], "dynabolt": ["Dynabolt 10×8", "pc"], "koas": ["Koas 1.5 in", "pc"], "refilRoll": ["Refil Roll", "pc"], "roofing": ["Roofing Screw", "dus"], "sealant": ["Sealant", "botol"], "noDrop": ["No Drop", "kg"], "serat": ["Serat Tisu", "bungkus"], "paralon": ["Paralon 3 in", "batang"], "keni": ["Keni 3 in", "pc"], "lemParalon": ["Lem Paralon", "tube"], "sengGalvalum": ["Seng Galvalum", "m"], "fkinkonte": ["Fkinkonte", "kg"]};
   const GROUPS_KECIL = {"🔩 Proses Besi Hollow": ["kawatLas", "kawatTambal", "wdCutting", "dempul", "amplas", "epoxy", "cat", "thiner", "dynabolt", "koas", "refilRoll", "fkinkonte"], "🔷 Kelengkapan Atap": ["roofing", "sealant", "noDrop", "serat", "sengGalvalum"], "🔧 Instalasi & Drainase": ["paralon", "keni", "lemParalon"]};
 
@@ -667,7 +712,7 @@
       html += `<div class="kecil-section-title">${groupLabel}</div>`;
       groupKeys.forEach(k=>{
         const qty   = SUMS_DATA[k][idx];
-        const harga = HARGA_KECIL[k];
+        const harga = getHK(k);
         const [label, satuan] = LABELS_KECIL[k];
         const subtotal = qty * harga;
         totalKecil += subtotal;
@@ -690,10 +735,21 @@
   }
 
   function updateGrandTotal(totalKecil){
-    const el = document.getElementById('grandTotalRow');
-    if(!el) return;
     const matTotal = window._matTotal || 0;
-    el.textContent = rp(matTotal + totalKecil);
+    const grandTotal = matTotal + totalKecil;
+    // Update atau buat elemen grand total
+    let el = document.getElementById('grandTotalBox');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'grandTotalBox';
+      el.className = 'biaya-total';
+      el.style.cssText = 'margin-top:14px;background:linear-gradient(135deg,#0f2d4a,#1a4568);border:2px solid rgba(58,155,213,0.4)';
+      el.innerHTML = `<div class="biaya-total-label" style="color:#fff;opacity:0.7">🏆 GRAND TOTAL (Material + Finishing)</div><div class="biaya-total-val" id="grandTotalVal" style="font-size:26px"></div>`;
+      const hasilCard = document.getElementById('hasilCard');
+      hasilCard.appendChild(el);
+    }
+    document.getElementById('grandTotalVal').textContent = rp(grandTotal);
+    el.style.display = 'block';
   }
 
   // ── PNG EXPORT — drawn via Canvas API, no external library ──
