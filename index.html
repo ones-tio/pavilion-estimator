@@ -83,6 +83,19 @@
   .note { font-size:12px; color:var(--muted); text-align:center; margin-top:10px; }
   .error-msg { background:#fff0f0; border:1.5px solid #f5a0a0; color:#c0392b; padding:12px; border-radius:var(--radius); font-size:14px; font-weight:600; text-align:center; margin-top:10px; display:none; }
   .error-msg.show { display:block; }
+  /* BARANG KECIL */
+  .kecil-card { background:#fff; border-radius:16px; box-shadow:0 2px 16px rgba(15,45,74,0.07); margin-top:14px; overflow:hidden; display:none; }
+  .kecil-card.show { display:block; }
+  .kecil-header { background:var(--navy); padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+  .kecil-header-title { font-size:13px; font-weight:800; color:#fff; }
+  .kecil-header-toggle { font-size:18px; color:rgba(255,255,255,0.6); transition:transform 0.2s; }
+  .kecil-body { padding:16px 20px; }
+  .kecil-body.collapsed { display:none; }
+  .kecil-section-title { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); margin:12px 0 6px; }
+  .kecil-section-title:first-child { margin-top:0; }
+  .kecil-row { display:flex; justify-content:space-between; align-items:center; padding:7px 10px; border-radius:8px; margin-bottom:4px; background:#f8fafc; }
+  .kecil-row-name { font-size:13px; color:var(--text); font-weight:500; }
+  .kecil-row-val { font-size:13px; font-weight:700; color:var(--navy); }
   /* HARGA PANEL */
   .harga-panel { background:#fff; border-radius:16px; padding:20px; box-shadow:0 2px 16px rgba(15,45,74,0.07); margin-bottom:14px; display:none; }
   .harga-panel.show { display:block; }
@@ -264,6 +277,17 @@
     <div id="hasilInner"></div>
   </div>
 
+  <!-- BARANG KECIL -->
+  <div class="kecil-card" id="kecilCard">
+    <div class="kecil-header" onclick="toggleKecil()">
+      <div class="kecil-header-title">🛒 Barang Kecil & Consumable</div>
+      <div class="kecil-header-toggle" id="kecilToggleIcon">▼</div>
+    </div>
+    <div class="kecil-body" id="kecilBody">
+      <div id="kecilInner"></div>
+    </div>
+  </div>
+
   <p class="note">* Batang hollow = panjang 6 meter · Lembaran atap sesuai panjang bentang</p>
 </div>
 
@@ -296,6 +320,13 @@
   function toggleHarga(){
     const p=document.getElementById('hargaPanel');
     p.classList.toggle('show');
+  }
+
+  function toggleKecil(){
+    const body=document.getElementById('kecilBody');
+    const icon=document.getElementById('kecilToggleIcon');
+    body.classList.toggle('collapsed');
+    icon.textContent=body.classList.contains('collapsed')?'▶':'▼';
   }
 
   function rp(n){ return 'Rp '+Math.round(n).toLocaleString('id-ID'); }
@@ -335,7 +366,7 @@
     document.getElementById('strukturToggle').querySelectorAll('.toggle-btn')[0].click();
     clearHasil();window.scrollTo({top:0,behavior:'smooth'});
   }
-  function clearHasil(){document.getElementById('hasilCard').classList.remove('show');document.getElementById('errorMsg').classList.remove('show');document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));}
+  function clearHasil(){document.getElementById('hasilCard').classList.remove('show');document.getElementById('errorMsg').classList.remove('show');document.getElementById('kecilCard').classList.remove('show');document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));}
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
 
   // Ukuran stok tersedia per jenis atap
@@ -573,6 +604,93 @@
           </div>
         </div>`;
     }
+
+    // ── BARANG KECIL ──
+    // Total meter hollow semua jenis
+    const totalMeterHollow = h510 + h46 + c44 + c24 + (pTiang+pGelagar);
+    const threshold = Math.ceil(totalMeterHollow / 30); // kelipatan per 30m
+
+    // Plessing: persegi = lebar+panjang, L shape = sisi terpanjang
+    let panjangPlessing = 0;
+    if(bentuk==='kotak'){
+      panjangPlessing = lebarTotal + bentangAtap;
+    } else {
+      const _a1v=parseFloat(document.getElementById('a1').value)||0;
+      const _a2v=parseFloat(document.getElementById('a2').value)||0;
+      const _b1v=parseFloat(document.getElementById('b1').value)||0;
+      const _b2v=parseFloat(document.getElementById('b2').value)||0;
+      panjangPlessing = Math.max(_a1v+_b1v, _a2v, _b2v);
+    }
+    const sengPlessing   = Math.ceil(panjangPlessing / 3); // 1m seng = 3m plessing
+    const sealantPlessing= Math.ceil(panjangPlessing / 2); // tiap 2m plessing +1 botol
+
+    // Roofing: 4pc/meter panjang atap → dibulatkan ke dus isi 20pc
+    const roofingPc  = Math.ceil(totalMeterAtap) * 4;
+    const roofingDus = Math.ceil(roofingPc / 20);
+
+    // Sealant total: dari luas atap + dari plessing
+    const sealantAtap   = Math.ceil(luas / 24) * 5;
+    const sealantTotal  = sealantAtap + sealantPlessing;
+
+    // No Drop & Serat tisu
+    const noDropKg   = Math.ceil(luas / 24);
+    const seratBungkus = Math.ceil(luas / 24);
+
+    // Hollow consumables (per 30m threshold)
+    const kawatLasDus   = threshold;       // 1 dus 2.2kg per 30m
+    const kawatTambalKg = threshold * 0.5;
+    const batuPotong    = threshold;       // set (batu potong WD)
+    const batuPenghalus = threshold;
+    const batuAmplas    = threshold;
+    const amplas80      = threshold * 5;   // meter
+    const amplas400     = threshold * 3;   // meter
+    const dempulGalon   = threshold;
+    const epoxyKg       = threshold * 3;
+    const catFinishKg   = threshold * 4;
+    const thinerGalon   = threshold * 3;
+    const koasJml       = threshold;
+
+    // Fixed per project
+    const dynabolt = 50;
+    const paralon  = 1;
+    const keni     = 4;
+
+    // Render barang kecil
+    function kr(nama, val){
+      return `<div class="kecil-row"><span class="kecil-row-name">${nama}</span><span class="kecil-row-val">${val}</span></div>`;
+    }
+    const kecilHTML = `
+      <div class="kecil-section-title">🔷 Kelengkapan Atap</div>
+      ${kr('Roofing Screw', `${roofingPc} pc / ${roofingDus} dus`)}
+      ${kr('No Drop', `${noDropKg} kg`)}
+      ${kr('Serat Tisu', `${seratBungkus} bungkus`)}
+      ${kr('Sealant', `${sealantTotal} botol (${sealantAtap} atap + ${sealantPlessing} plessing)`)}
+      ${kr('Plessing (Seng Galvalum 60cm)', `${panjangPlessing.toFixed(1)} m kebutuhan → ${sengPlessing} m beli`)}
+
+      <div class="kecil-section-title">🔩 Proses Besi Hollow</div>
+      ${kr('Kawat Las', `${kawatLasDus} dus (2.2 kg/dus)`)}
+      ${kr('Kawat Tambal', `${kawatTambalKg} kg`)}
+      ${kr('Batu Potong WD Cutting', `${batuPotong} set`)}
+      ${kr('Batu Penghalus', `${batuPenghalus} set`)}
+      ${kr('Batu Amplas', `${batuAmplas} set`)}
+
+      <div class="kecil-section-title">🎨 Finishing Cat</div>
+      ${kr('Amplas 80', `${amplas80} meter`)}
+      ${kr('Amplas 400', `${amplas400} meter`)}
+      ${kr('Dempul', `${dempulGalon} galon`)}
+      ${kr('Epoxy (Cat Dasar)', `${epoxyKg} kg`)}
+      ${kr('Cat Finish', `${catFinishKg} kg`)}
+      ${kr('Thiner', `${thinerGalon} galon`)}
+      ${kr('Koas 1.5 in', `${koasJml} buah`)}
+
+      <div class="kecil-section-title">🔧 Aksesoris & Instalasi</div>
+      ${kr('Dynabolt 10×8', `${dynabolt} pc`)}
+      ${kr('Paralon 3 in', `${paralon} batang`)}
+      ${kr('Keni 3 in', `${keni} pc`)}
+    `;
+
+    document.getElementById('kecilInner').innerHTML = kecilHTML;
+    document.getElementById('kecilCard').classList.add('show');
 
     const now=new Date();
     const tgl=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
