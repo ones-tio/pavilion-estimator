@@ -1,96 +1,101 @@
-function hitungProject({ hariKerja, tim }) {
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Estimator Project</title>
+</head>
+<body>
 
-  // =========================
-  // VALIDASI
-  // =========================
-  if (hariKerja <= 0) {
-    throw new Error("Hari kerja harus lebih dari 0");
-  }
+  <h2>Estimator Project</h2>
 
-  // =========================
-  // KONSTANTA
-  // =========================
-  const TRANSPORT_AWAL_AKHIR = 130000;
-  const TRANSPORT_HARIAN = 30000;
-  const LISTRIK = 100000;
-  const MARGIN = 0.3;
+  <label>Hari Kerja:</label>
+  <input type="number" id="hari" value="7"><br><br>
 
-  // =========================
-  // HARGA TIM
-  // =========================
-  const hargaTim = {
-    1: 455000,
-    2: 420000,
-    3: 390000
-  };
+  <label>Pilih Tim:</label>
+  <select id="tim">
+    <option value="1">Tim 1</option>
+    <option value="2">Tim 2</option>
+    <option value="3">Tim 3</option>
+  </select><br><br>
 
-  if (!hargaTim[tim]) {
-    throw new Error("Tim tidak valid (pilih 1, 2, atau 3)");
-  }
+  <button onclick="hitung()">Hitung</button>
 
-  // =========================
-  // HITUNG TRANSPORT
-  // =========================
-  let biayaTransport = 0;
+  <h3>Hasil:</h3>
+  <pre id="output"></pre>
 
-  if (hariKerja === 1) {
-    biayaTransport = TRANSPORT_AWAL_AKHIR;
-  } else {
-    const hariTengah = hariKerja - 2;
-    biayaTransport =
-      (TRANSPORT_AWAL_AKHIR * 2) +
-      (hariTengah * TRANSPORT_HARIAN);
-  }
+  <script>
+    function hitungProject(hariKerja, tim) {
 
-  // =========================
-  // HITUNG UPAH
-  // =========================
-  const biayaUpah = hargaTim[tim] * hariKerja;
+      if (hariKerja <= 0) {
+        return "Hari kerja harus lebih dari 0";
+      }
 
-  // =========================
-  // TOTAL MODAL
-  // =========================
-  const totalBiaya =
-    biayaTransport +
-    biayaUpah +
-    LISTRIK;
+      const TRANSPORT_AWAL_AKHIR = 130000;
+      const TRANSPORT_HARIAN = 30000;
+      const LISTRIK = 100000;
+      const MARGIN = 0.3;
 
-  // =========================
-  // HARGA JUAL
-  // =========================
-  const hargaJual = totalBiaya * (1 + MARGIN);
-  const profit = hargaJual - totalBiaya;
+      const hargaTim = {
+        1: 455000,
+        2: 420000,
+        3: 390000
+      };
 
-  // =========================
-  // OUTPUT
-  // =========================
-  return {
-    hariKerja,
-    tim,
-    biayaTransport,
-    biayaUpah,
-    biayaListrik: LISTRIK,
-    totalBiaya,
-    hargaJual,
-    profit
-  };
-}
+      if (!hargaTim[tim]) {
+        return "Tim tidak valid";
+      }
 
+      let biayaTransport = 0;
 
-// =========================
-// CONTOH PEMAKAIAN
-// =========================
-const hasil = hitungProject({
-  hariKerja: 7,
-  tim: 1
-});
+      if (hariKerja === 1) {
+        biayaTransport = TRANSPORT_AWAL_AKHIR;
+      } else {
+        const hariTengah = hariKerja - 2;
+        biayaTransport =
+          (TRANSPORT_AWAL_AKHIR * 2) +
+          (hariTengah * TRANSPORT_HARIAN);
+      }
 
-console.log("=== HASIL PERHITUNGAN ===");
-console.log(`Hari Kerja  : ${hasil.hariKerja}`);
-console.log(`Tim         : ${hasil.tim}`);
-console.log(`Transport   : Rp ${hasil.biayaTransport.toLocaleString()}`);
-console.log(`Upah        : Rp ${hasil.biayaUpah.toLocaleString()}`);
-console.log(`Listrik     : Rp ${hasil.biayaListrik.toLocaleString()}`);
-console.log(`Total Modal : Rp ${hasil.totalBiaya.toLocaleString()}`);
-console.log(`Harga Jual  : Rp ${hasil.hargaJual.toLocaleString()}`);
-console.log(`Profit      : Rp ${hasil.profit.toLocaleString()}`);
+      const biayaUpah = hargaTim[tim] * hariKerja;
+
+      const totalBiaya =
+        biayaTransport +
+        biayaUpah +
+        LISTRIK;
+
+      const hargaJual = totalBiaya * (1 + MARGIN);
+      const profit = hargaJual - totalBiaya;
+
+      return {
+        biayaTransport,
+        biayaUpah,
+        listrik: LISTRIK,
+        totalBiaya,
+        hargaJual,
+        profit
+      };
+    }
+
+    function hitung() {
+      const hari = parseInt(document.getElementById("hari").value);
+      const tim = parseInt(document.getElementById("tim").value);
+
+      const hasil = hitungProject(hari, tim);
+
+      if (typeof hasil === "string") {
+        document.getElementById("output").innerText = hasil;
+        return;
+      }
+
+      document.getElementById("output").innerText = 
+`Transport   : Rp ${hasil.biayaTransport.toLocaleString()}
+Upah        : Rp ${hasil.biayaUpah.toLocaleString()}
+Listrik     : Rp ${hasil.listrik.toLocaleString()}
+Total Modal : Rp ${hasil.totalBiaya.toLocaleString()}
+Harga Jual  : Rp ${hasil.hargaJual.toLocaleString()}
+Profit      : Rp ${hasil.profit.toLocaleString()}`;
+    }
+  </script>
+
+</body>
+</html>
