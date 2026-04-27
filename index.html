@@ -1,8 +1,8 @@
-function hitungProject({
-  hariKerja,
-  tim,
-}) {
+function hitungProject({ hariKerja, tim }) {
+
+  // =========================
   // VALIDASI
+  // =========================
   if (hariKerja <= 0) {
     throw new Error("Hari kerja harus lebih dari 0");
   }
@@ -56,7 +56,7 @@ function hitungProject({
     LISTRIK;
 
   // =========================
-  // HARGA JUAL (MARGIN 30%)
+  // HARGA JUAL
   // =========================
   const hargaJual = totalBiaya * (1 + MARGIN);
   const profit = hargaJual - totalBiaya;
@@ -76,8 +76,9 @@ function hitungProject({
   };
 }
 
+
 // =========================
-// CONTOH PAKAI
+// CONTOH PEMAKAIAN
 // =========================
 const hasil = hitungProject({
   hariKerja: 7,
@@ -85,11 +86,11 @@ const hasil = hitungProject({
 });
 
 console.log("=== HASIL PERHITUNGAN ===");
-console.log(`Hari Kerja     : ${hasil.hariKerja}`);
-console.log(`Tim            : ${hasil.tim}`);
-console.log(`Transport      : Rp ${hasil.biayaTransport.toLocaleString()}`);
-console.log(`Upah Tukang    : Rp ${hasil.biayaUpah.toLocaleString()}`);
-console.log(`Listrik        : Rp ${hasil.biayaListrik.toLocaleString()}`);
-console.log(`Total Modal    : Rp ${hasil.totalBiaya.toLocaleString()}`);
-console.log(`Harga Jual     : Rp ${hasil.hargaJual.toLocaleString()}`);
-console.log(`Profit         : Rp ${hasil.profit.toLocaleString()}`);
+console.log(`Hari Kerja  : ${hasil.hariKerja}`);
+console.log(`Tim         : ${hasil.tim}`);
+console.log(`Transport   : Rp ${hasil.biayaTransport.toLocaleString()}`);
+console.log(`Upah        : Rp ${hasil.biayaUpah.toLocaleString()}`);
+console.log(`Listrik     : Rp ${hasil.biayaListrik.toLocaleString()}`);
+console.log(`Total Modal : Rp ${hasil.totalBiaya.toLocaleString()}`);
+console.log(`Harga Jual  : Rp ${hasil.hargaJual.toLocaleString()}`);
+console.log(`Profit      : Rp ${hasil.profit.toLocaleString()}`);
