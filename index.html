@@ -806,10 +806,17 @@
     html += `<div class="tp-row"><span class="tp-row-label">Listrik</span><span class="tp-row-val">${rp(listrik)}</span></div>`;
     if(transport > 0) html += `<div class="tp-row"><span class="tp-row-label">Transport (${hari} hari)</span><span class="tp-row-val">${rp(transport)}</span></div>`;
     if(upah > 0)      html += `<div class="tp-row"><span class="tp-row-label">Upah ${timLabel} × ${hari} hari</span><span class="tp-row-val">${rp(upah)}</span></div>`;
+    const hargaJual = grandTotal / 0.7;
     html += `<div class="tp-total">
       <span class="tp-total-label">🏆 TOTAL PROJECT</span>
       <span class="tp-total-val">${rp(grandTotal)}</span>
+    </div>
+    <div class="tp-total" style="margin-top:8px;background:rgba(46,204,138,0.15);border-color:rgba(46,204,138,0.4)">
+      <span class="tp-total-label" style="color:#2ecc8a">💰 HARGA JUAL (margin 30%)</span>
+      <span class="tp-total-val">${rp(hargaJual)}</span>
     </div>`;
+    window._grandTotal  = grandTotal;
+    window._hargaJual   = hargaJual;
 
     document.getElementById('totalProjectInner').innerHTML = html;
     document.getElementById('totalProjectCard').classList.add('show');
