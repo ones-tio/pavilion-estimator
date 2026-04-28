@@ -83,6 +83,16 @@
   .note { font-size:12px; color:var(--muted); text-align:center; margin-top:10px; }
   .error-msg { background:#fff0f0; border:1.5px solid #f5a0a0; color:#c0392b; padding:12px; border-radius:var(--radius); font-size:14px; font-weight:600; text-align:center; margin-top:10px; display:none; }
   .error-msg.show { display:block; }
+  /* TOTAL PROJECT */
+  .total-project-card { background:linear-gradient(135deg,#0a2035,#0f2d4a); border-radius:16px; padding:20px; color:#fff; margin-top:14px; display:none; }
+  .total-project-card.show { display:block; }
+  .total-project-title { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:14px; }
+  .tp-row { display:flex; justify-content:space-between; padding:8px 12px; background:rgba(255,255,255,0.06); border-radius:8px; margin-bottom:5px; }
+  .tp-row-label { font-size:13px; color:rgba(255,255,255,0.75); }
+  .tp-row-val { font-size:14px; font-weight:700; color:#fff; }
+  .tp-total { margin-top:12px; padding:14px; background:rgba(58,155,213,0.2); border:1.5px solid rgba(58,155,213,0.4); border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
+  .tp-total-label { font-size:12px; font-weight:700; color:var(--accent); letter-spacing:0.5px; }
+  .tp-total-val { font-size:26px; font-weight:800; color:#fff; }
   /* BARANG KECIL */
   .kecil-card { background:#fff; border-radius:16px; box-shadow:0 2px 16px rgba(15,45,74,0.07); margin-top:14px; overflow:hidden; display:none; }
   .kecil-card.show { display:block; }
@@ -261,6 +271,26 @@
     </div>
   </div>
 
+  <!-- PEMASANGAN -->
+  <div class="card">
+    <div class="card-title">Pemasangan</div>
+    <div class="input-row" style="margin-bottom:14px">
+      <div class="input-group">
+        <label>Lama Pemasangan (hari)</label>
+        <input id="hariPasang" type="number" step="1" min="1" placeholder="misal: 4">
+      </div>
+      <div class="input-group">
+        <label>Tim Tukang</label>
+        <select id="timTukang" style="padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:600;color:var(--text);background:#fafcfe;width:100%">
+          <option value="">-- Pilih Tim --</option>
+          <option value="455000">Tim 1 — Rp455.000/hr</option>
+          <option value="420000">Tim 2 — Rp420.000/hr</option>
+          <option value="390000">Tim 3 — Rp390.000/hr</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <button class="btn-atur-harga" onclick="toggleHarga()">⚙️ Atur Harga Material</button>
 
   <!-- PANEL HARGA (tersimpan permanen) -->
@@ -325,6 +355,12 @@
       <button class="btn-simpan" id="btnSimpan" onclick="simpanPNG()">💾 Simpan PNG</button>
     </div>
     <div id="hasilInner"></div>
+  </div>
+
+  <!-- TOTAL PROJECT -->
+  <div class="total-project-card" id="totalProjectCard">
+    <div class="total-project-title">💼 Total Biaya Project</div>
+    <div id="totalProjectInner"></div>
   </div>
 
   <p class="note">* Batang hollow = panjang 6 meter · Lembaran atap sesuai panjang bentang</p>
@@ -401,7 +437,11 @@
   }
 
   // Load harga saat halaman dibuka
-  window.addEventListener('DOMContentLoaded', loadHarga);
+  window.addEventListener('DOMContentLoaded', ()=>{
+    loadHarga();
+    document.getElementById('hariPasang').addEventListener('input', renderTotalProject);
+    document.getElementById('timTukang').addEventListener('change', renderTotalProject);
+  });
 
   function setBentuk(v,el){bentuk=v;document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('kotakForm').style.display=v==='kotak'?'block':'none';document.getElementById('LForm').style.display=v==='L'?'block':'none';clearHasil();}
   function setAtap(e,n,el){atapEff=parseFloat(e);atapNama=n;document.querySelectorAll('.atap-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');clearHasil();}
@@ -421,8 +461,10 @@
     document.getElementById('hasilCard').classList.remove('show');
     document.getElementById('errorMsg').classList.remove('show');
     document.getElementById('kecilCard').classList.remove('show');
+    document.getElementById('totalProjectCard').classList.remove('show');
     const gt=document.getElementById('grandTotalBox');
     if(gt) gt.remove();
+    window._matTotal=0; window._kecilTotal=0;
     document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
   }
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
@@ -734,22 +776,63 @@
     updateGrandTotal(totalKecil);
   }
 
+  function hitungTransport(hari){
+    if(!hari || hari <= 0) return 0;
+    if(hari === 1) return 130000 * 2; // pergi + pulang 1 hari
+    return (130000 * 2) + (30000 * (hari - 2));
+  }
+
+  function renderTotalProject(){
+    const hari     = parseInt(document.getElementById('hariPasang').value) || 0;
+    const upahRate = parseInt(document.getElementById('timTukang').value)   || 0;
+    const matTotal = window._matTotal   || 0;
+    const kecilTot = window._kecilTotal || 0;
+
+    if(!hari && !upahRate) {
+      document.getElementById('totalProjectCard').classList.remove('show');
+      return;
+    }
+
+    const listrik   = 100000;
+    const transport = hitungTransport(hari);
+    const upah      = upahRate * hari;
+    const grandTotal = matTotal + kecilTot + listrik + transport + upah;
+
+    const timLabel = document.getElementById('timTukang').selectedOptions[0]?.text || '-';
+
+    let html = '';
+    if(matTotal > 0) html += `<div class="tp-row"><span class="tp-row-label">Material Utama</span><span class="tp-row-val">${rp(matTotal)}</span></div>`;
+    if(kecilTot > 0) html += `<div class="tp-row"><span class="tp-row-label">Finishing & Assembly</span><span class="tp-row-val">${rp(kecilTot)}</span></div>`;
+    html += `<div class="tp-row"><span class="tp-row-label">Listrik</span><span class="tp-row-val">${rp(listrik)}</span></div>`;
+    if(transport > 0) html += `<div class="tp-row"><span class="tp-row-label">Transport (${hari} hari)</span><span class="tp-row-val">${rp(transport)}</span></div>`;
+    if(upah > 0)      html += `<div class="tp-row"><span class="tp-row-label">Upah ${timLabel} × ${hari} hari</span><span class="tp-row-val">${rp(upah)}</span></div>`;
+    html += `<div class="tp-total">
+      <span class="tp-total-label">🏆 TOTAL PROJECT</span>
+      <span class="tp-total-val">${rp(grandTotal)}</span>
+    </div>`;
+
+    document.getElementById('totalProjectInner').innerHTML = html;
+    document.getElementById('totalProjectCard').classList.add('show');
+    document.getElementById('totalProjectCard').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
   function updateGrandTotal(totalKecil){
+    window._kecilTotal = totalKecil;
+    // Tampilkan total material+finishing di hasil card
     const matTotal = window._matTotal || 0;
-    const grandTotal = matTotal + totalKecil;
-    // Update atau buat elemen grand total
     let el = document.getElementById('grandTotalBox');
     if(!el){
       el = document.createElement('div');
       el.id = 'grandTotalBox';
       el.className = 'biaya-total';
-      el.style.cssText = 'margin-top:14px;background:linear-gradient(135deg,#0f2d4a,#1a4568);border:2px solid rgba(58,155,213,0.4)';
-      el.innerHTML = `<div class="biaya-total-label" style="color:#fff;opacity:0.7">🏆 GRAND TOTAL (Material + Finishing)</div><div class="biaya-total-val" id="grandTotalVal" style="font-size:26px"></div>`;
-      const hasilCard = document.getElementById('hasilCard');
-      hasilCard.appendChild(el);
+      el.style.cssText = 'margin-top:14px;background:rgba(58,155,213,0.15);border-radius:10px;padding:14px';
+      el.innerHTML = `<div class="biaya-total-label">Material + Finishing</div><div class="biaya-total-val" id="grandTotalVal"></div>`;
+      document.getElementById('hasilCard').appendChild(el);
     }
-    document.getElementById('grandTotalVal').textContent = rp(grandTotal);
+    document.getElementById('grandTotalVal').textContent = rp(matTotal + totalKecil);
     el.style.display = 'block';
+    // Trigger total project jika sudah ada input pemasangan
+    renderTotalProject();
   }
 
   // ── PNG EXPORT — drawn via Canvas API, no external library ──
