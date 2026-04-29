@@ -83,6 +83,12 @@
   .note { font-size:12px; color:var(--muted); text-align:center; margin-top:10px; }
   .error-msg { background:#fff0f0; border:1.5px solid #f5a0a0; color:#c0392b; padding:12px; border-radius:var(--radius); font-size:14px; font-weight:600; text-align:center; margin-top:10px; display:none; }
   .error-msg.show { display:block; }
+  /* SLIDER RISIKO */
+  .slider-wrap { margin-top:12px; }
+  .slider-wrap label { font-size:12px; font-weight:600; color:var(--muted); display:flex; justify-content:space-between; margin-bottom:6px; }
+  .slider-wrap label span { font-weight:800; color:var(--navy); font-size:14px; }
+  input[type=range] { width:100%; accent-color:var(--navy); height:6px; cursor:pointer; }
+
   /* TOTAL PROJECT */
   .total-project-card { background:linear-gradient(135deg,#0a2035,#0f2d4a); border-radius:16px; padding:20px; color:#fff; margin-top:14px; display:none; }
   .total-project-card.show { display:block; }
@@ -289,6 +295,10 @@
         </select>
       </div>
     </div>
+    <div class="slider-wrap">
+      <label>Faktor Risiko <span id="risikoVal">5%</span></label>
+      <input type="range" id="risikoSlider" min="0" max="15" step="1" value="5">
+    </div>
   </div>
 
   <button class="btn-atur-harga" onclick="toggleHarga()">⚙️ Atur Harga Material</button>
@@ -441,6 +451,10 @@
     loadHarga();
     document.getElementById('hariPasang').addEventListener('input', renderTotalProject);
     document.getElementById('timTukang').addEventListener('change', renderTotalProject);
+    document.getElementById('risikoSlider').addEventListener('input', ()=>{
+      document.getElementById('risikoVal').textContent = document.getElementById('risikoSlider').value+'%';
+      renderTotalProject();
+    });
   });
 
   function setBentuk(v,el){bentuk=v;document.getElementById('bentukToggle').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('kotakForm').style.display=v==='kotak'?'block':'none';document.getElementById('LForm').style.display=v==='L'?'block':'none';clearHasil();}
@@ -464,7 +478,7 @@
     document.getElementById('totalProjectCard').classList.remove('show');
     const gt=document.getElementById('grandTotalBox');
     if(gt) gt.remove();
-    window._matTotal=0; window._kecilTotal=0; window._grandTotal=0; window._hargaJual=0; window._diskonAwal=0; window._diskonFinal=0;
+    window._matTotal=0; window._kecilTotal=0; window._grandTotal=0; window._hargaJual=0; window._diskonAwal=0; window._diskonFinal=0; window._hargaAfterDA=0; window._hargaAfterDF=0; window._risikoPct=0; window._risikoNom=0;
     document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
   }
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
