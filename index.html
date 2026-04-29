@@ -464,7 +464,7 @@
     document.getElementById('totalProjectCard').classList.remove('show');
     const gt=document.getElementById('grandTotalBox');
     if(gt) gt.remove();
-    window._matTotal=0; window._kecilTotal=0;
+    window._matTotal=0; window._kecilTotal=0; window._grandTotal=0; window._hargaJual=0; window._diskonAwal=0; window._diskonFinal=0;
     document.querySelectorAll('.err').forEach(f=>f.classList.remove('err'));
   }
   function showError(msg,ids){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('show');document.getElementById('hasilCard').classList.remove('show');if(ids)ids.forEach(id=>{const f=document.getElementById(id);if(f)f.classList.add('err');});}
